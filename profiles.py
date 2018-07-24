@@ -52,7 +52,7 @@ class Profile():
 
     async def daily(self):
         lasttime = datetime.now()-self.info['lastdaily']
-        if self.id == wishid or lasttime.days < 1 and lasttime.seconds / 3600.0 < 20:
+        if self.id != wishid and lasttime.days < 1 and lasttime.seconds / 3600.0 < 20:
            raise TooSoonError(self.info['lastdaily'], datetime.now())
         amount = random.randrange(self.daily_range[0], self.daily_range[1])
         self.amend_currency(amount)

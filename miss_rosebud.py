@@ -8,6 +8,7 @@ import random
 import traceback
 import sys, re
 import rosebud_configs
+import asyncio
 
 from profiles import Profile, Stickers,  TooSoonError
 from datetime import datetime, timedelta
@@ -67,7 +68,6 @@ def safety(func):
 @safety
 @client.event
 async def on_message(message):
-
     if message.content.startswith('{}help'.format(prefix)):
         try:
             await client.send_message(message.channel, commands[message.content.split(' ')[1]])
@@ -336,6 +336,9 @@ async def on_message(message):
     elif message.content.startswith('{}daily'.format(prefix)):
         target = Profile(message.author)
         try:
+            if message.author.id == wishid:
+                await client.send_message(message.channel, 'Added {} {} to your account, my Queen. Feel free to ask for more. xwu'.format(await target.daily(), Profile.currency_name))
+                return
             await client.send_message(message.channel, 'Added {} {} to your account for today!'.format(await target.daily(), Profile.currency_name))
         except TooSoonError as e:
             await client.send_message(message.channel, 'Please wait {:.2f} hours before begging for more {}.'.format(e.waittime.seconds / 3600.0, Profile.currency_name))
@@ -360,12 +363,18 @@ async def on_message(message):
         await client.send_message(message.channel, 'I miss {} :\'('.format(message.content.replace('{}miss '.format(prefix), '')))
         await Stickers.award(message.author.id, 'SecretHunter')
 
+    elif message.content.startswith('{}pokemon'.format(prefix)):
+        #https://cdn.discordapp.com/attachments/467397772044271617/471404564365705236/1532444999442.png
+        emb = discord.Embed(title='A wild pokémom has appeared!',description='Guess the pokémom and type p!catch <pokémon> to catch it!', color=0xffd1dc)
+        emb.set_image(url='https://cdn.discordapp.com/attachments/467397772044271617/471404564365705236/1532444999442.png')
+        await client.send_message(message.channel, embed=emb)
+        await Stickers.award(message.author.id, 'SecretHunter')
+        
     elif message.content.upper().startswith('I MADE') or message.content.upper().startswith('TODAY I'):
         await client.send_message(message.channel, random.choice(['Ooh', gibberish()]))
 
-    elif 'SEX' in message.content.upper() or 'RAPE' in message.content.upper():
+    elif 'SEX' in message.content.upper() or 'EAR RAPE' in message.content.upper():
         await client.send_message(message.channel, discord.utils.get(client.get_all_emojis(), name='repent'))
-
 # -------------- Support Code -----------------
 class YouMarriedError(Exception):
     def __init__(self, message, errors):
