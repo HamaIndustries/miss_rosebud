@@ -345,7 +345,10 @@ async def on_message(message):
         except Exception as e:
             print(repr(e))
             await client.send_message(message.channel, misccommands['daily'])
-        
+
+    elif message.content.startswith('{}baka'.format(prefix)) or message.content.startswith('{}bitch'.format(prefix)):
+        with open('watashipasta.txt', 'r') as f:
+            await client.send_message(message.channel, f.read())
 
     elif message.content.startswith('{}test'.format(prefix)):
         await client.send_message(message.channel, 'hi')
