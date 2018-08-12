@@ -32,6 +32,7 @@ class Profile():
     daily_range = (10, 15)
     
     def __init__(self, user):
+        self.user = user
         self.id = user.id
         self.name = user.name.translate(trans)
         self.info = {}
@@ -63,6 +64,9 @@ class Profile():
     def amend_currency(self, amount):
         self.info[self.currency_name] += amount
         self.save_profile()
+
+    def get_balance(self):
+        return int(self.info[self.currency_name])
             
     async def get_card_plaintext(self, client):
         if self.info['marriages'] == None:

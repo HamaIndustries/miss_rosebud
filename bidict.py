@@ -33,10 +33,7 @@ class marriage(MutableMapping):
             del self._storage[key]
             return
         if key in self._storage.values():
-            delt = ''
-            for i in self:
-                delt = i[0] if i[1] == key else ''
-            del self._storage[delt]
+            del self._storage[next(k for k, v in self._storage.items() if v == key)]
             return
         raise KeyError
     
