@@ -128,7 +128,8 @@ async def nikki(client, message):
     if profile.size[1] > 200:
         profile.thumbnail((1000, 200), Image.ANTIALIAS)
     else:
-        profile = profile.resize((200, profile.size[0]//profile.size[1]*200), Image.BICUBIC)
+        aspect = 200//profile.size[1]
+        profile = profile.resize(tuple([x*aspect for x in profile.size]), Image.BICUBIC)
     
     canvas.paste(profile, (0,200))
     canvas.paste(overlay, (0,0), overlay)

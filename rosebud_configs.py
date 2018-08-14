@@ -10,7 +10,7 @@ trans = dict.fromkeys(range(0x10000, sys.maxunicode + 1), 0xfffd)
 def get_config(category):
     cfg = configparser.ConfigParser({
         'prefix':',,',
-        'home_dir':os.path.dirname(os.path.abspath(__file__)),
+        'home_dir':os.path.dirname(os.path.abspath(__file__))+'/resources',
         'suppress_loading_messages':'0',
         'token':'CHANGEME',
         'main_server_id':'425046326275866626',
