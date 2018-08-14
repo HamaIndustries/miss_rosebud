@@ -1,6 +1,6 @@
 from PIL import Image
 from io import BytesIO
-from discord import Embed, utils
+from discord import Embed
 from datetime import datetime
 
 import rosebud_configs
@@ -10,6 +10,7 @@ import copy
 import sys
 import pickle
 import requests
+from backend import utils
 import bidict
 import re
 
@@ -29,7 +30,7 @@ class Profile():
     '''
     currency_name = 'kisses'
     currency_symbol = '₪'
-    daily_range = (10, 15)
+    daily_range = settings.money_range
     
     def __init__(self, user):
         self.user = user
@@ -54,7 +55,7 @@ class Profile():
     async def daily(self):
         lasttime = datetime.now()-self.info['lastdaily']
         if self.id != wishid and lasttime.days < 1 and lasttime.seconds / 3600.0 < 20:
-           raise TooSoonError(self.info['lastdaily'], datetime.now())
+           raise utils.TooSoonError(self.info['lastdaily'], datetime.now())
         amount = random.randrange(self.daily_range[0], self.daily_range[1])
         self.amend_currency(amount)
         self.info['lastdaily'] = datetime.now()
@@ -200,7 +201,3 @@ def save_user_info(id, entry):
     with open('{}/userlist.pk'.format(settings.home_dir),'wb') as f:
         userlist[id] = entry
         pickle.dump(userlist, f)
-
-class TooSoonError(Exception):
-     def __init__(self, current, goal):
-         self.waittime =  current - goal

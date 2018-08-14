@@ -1,7 +1,7 @@
 from collections.abc import MutableMapping
-
-import os, pickle
 import rosebud_configs
+import os, pickle
+
 
 settings = rosebud_configs.settings
 
@@ -47,17 +47,6 @@ class marriage(MutableMapping):
 
     def __str__(self):
         return str([a for a in self])
-
-
-class YouMarriedError(Exception):
-    def __init__(self, message, errors):
-        super().__init__(message)
-        self.errors = errors
-
-class ThemMarriedError(Exception):
-    def __init__(self, message, errors):
-        super().__init__(message)
-        self.errors = errors
 
 async def silentremove(filename):
     try:
@@ -136,19 +125,6 @@ def delwmarriage(a):
         del wishimarriages[a]
     with open('{}/wishidirectory.pk'.format(settings.home_dir), 'wb') as f:
         pickle.dump(wishimarriages, f)
-
-async def send_image(image, cli, channel): #TODO: add lock to make this thread safe
-    #with stuff_lock:
-    try:
-        bg = Image.new('RGBA', image.size)
-        bg.paste(image, (0,0))
-        bg.save('temp.png')
-        await cli.send_file(channel, 'temp.png')
-    except Exception as e:
-        print('exception in send_image!')
-        print('error: {}'.format(str(e)))
-    finally:
-        await silentremove('temp.png')
 '''
 with open('directory.pk', 'rb') as f:
     proposals = pickle.load(f)
