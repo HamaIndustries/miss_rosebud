@@ -2,9 +2,10 @@ import roseworks, rosebud_configs
 from backend import utils
 from bidict import marriage
 from backend.profiles import Profile, Stickers
-from backend.utils import TooSoonError
+from backend.utils import TooSoonError, gibberish
 
-import pickle, traceback, datetime
+import pickle, traceback
+from datetime import datetime
 
 '''
 Marriage commands!
@@ -20,6 +21,9 @@ prefix = rosebud_configs.settings.prefix
 async def marry(client, message):
     try:
         target = message.mentions[0]
+        if target.id == '447249858265481226':
+            await client.send_message(message.channel, 'This person is too ugly to be loved.')
+            return
         if target.id == message.author.id:
             await client.send_message(message.channel, 'Marrying yourself? This is so sad, Music Baby play despacito')
             return
@@ -101,6 +105,9 @@ async def wishimarry(client, message):
     target = message.mentions[0]
     wishimarriages = readwmarriages()
     writewmarriage(target.id)
+    if target.id == '447249858265481226':
+            await client.send_message(message.channel, 'This person is too ugly to be loved.')
+            return
     if target.id in wishimarriages:
         delta = datetime.now()-wishimarriages[target.id]['anniversary']
         if target.id == roseid:

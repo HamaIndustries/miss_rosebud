@@ -1,7 +1,7 @@
 import roseworks
 from backend.profiles import Profile
 from backend import utils
-from rosebud_configs import wishid
+from rosebud_configs import wishid, trans
 
 import discord
 

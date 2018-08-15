@@ -18,10 +18,17 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    print(counter.interval)
+    print('ratcount: {}'.format(counter.interval))
     counter.interval -= 1
-    if counter.interval < 1:
+    if counter.interval < 1 and not message.author.bot:
         await client.send_message(message.channel, '*squeak*')
         counter.interval = random.randrange(7, 15)
 
-client.run('NDczNjgyMjAxNzU4NjYyNjU2.DkFfEA.AvF5ZsYmSq53Y20hwKH_fLJ0Ork')
+if __name__ == 'main':
+    start()
+
+async def astart():
+    start()
+
+def start():
+    client.run('NDczNjgyMjAxNzU4NjYyNjU2.DkFfEA.AvF5ZsYmSq53Y20hwKH_fLJ0Ork')

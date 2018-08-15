@@ -1,7 +1,7 @@
 import roseworks, rosebud_configs
 from modules import big_boys, conversation_hearts, general, kissy, marriage_owo, misty, xwu_nud35
 
-import discord, re, traceback
+import discord, re, traceback, sys
 
 client = discord.Client()
 trans = rosebud_configs.trans
@@ -120,11 +120,18 @@ async def on_message(message):
     else:
         for i in roseworks.conversations:
             await i(client, message)
-                
-                
+            
+async def astart():
+    start()
+         
+def start():
+    try:
+        client.run(settings.token)
+    except discord.errors.LoginFailure:
+        if '--debuglogin' or '--dl' in sys.argv:
+            raise
+        else:
+            print('config.cfg created, change login token\nIf you recieve this message after changing it, try running the program with argument --debuglogin')
 
-
-
-
-           
-client.run(settings.token)
+if __name__ == '__main__':
+    start()
