@@ -2,7 +2,7 @@ import roseworks, rosebud_configs
 from backend.utils import unmultiply, premultiply, send_image
 from backend import wishify
 
-import requests, traceback, discord
+import requests, traceback, discord, aiohttp
 from io import BytesIO
 from PIL import Image
 
@@ -12,7 +12,7 @@ Image commands!
 
 settings = rosebud_configs.settings
 
-@roseworks.command('wishify', 'wishify {{url}} {{color hex}}', 'image')
+@roseworks.command('wishify', 'wishify {{url}} {{color hex}}', roseworks.IMAGES)
 async def wishif(client, message):
     print(message.author.id)
     arg = message.content.strip().split(' ')
@@ -58,12 +58,12 @@ async def wishif(client, message):
 
     #await client.send_message(message.channel, message.embeds[0].image.url)
 
-@roseworks.command('dlemoji', 'dlemoji [emoji]', 'image')
+@roseworks.command('dlemoji', 'dlemoji [emoji]', roseworks.IMAGES)
 async def dlemoji(client, message):
     response = requests.get(discord.utils.get(client.get_all_emojis(), name = message.content.split(':')[1]).url)
     await send_image(Image.open(BytesIO(response.content)), client, message.channel)
 
-@roseworks.command('dlprofile', 'dlprofile {{@user}}', 'image')
+@roseworks.command('dlprofile', 'dlprofile {{@user}}', roseworks.GENERAL)
 async def dlprofile(client, message):
     if len(message.mentions) > 0:
         target = message.mentions[0]
@@ -75,7 +75,7 @@ async def dlprofile(client, message):
 
     await send_image(profile, client, message.channel)
 
-@roseworks.command('gay', 'gay {{@user|url}}', 'image')
+@roseworks.command('gay', 'gay {{@user|url}}', roseworks.IMAGES)
 async def gay(client, message):
     if len(message.mentions) > 0:
         target = message.mentions[0]
@@ -104,7 +104,7 @@ async def gay(client, message):
     
     await send_image(profile, client, message.channel)
 
-@roseworks.command('nikki', 'nikki {{@user|url}}', 'image')
+@roseworks.command('nikki', 'nikki {{@user|url}}', roseworks.IMAGES)
 async def nikki(client, message):
     if len(message.mentions) > 0:
         target = message.mentions[0]
@@ -136,7 +136,7 @@ async def nikki(client, message):
     
     await send_image(canvas, client, message.channel)
 
-@roseworks.command('hotel', 'hotel {{@user|url}}', 'image')
+@roseworks.command('hotel', 'hotel {{@user|url}}', roseworks.IMAGES)
 async def hotel(client, message):
     if len(message.mentions) > 0:
         target = message.mentions[0]
@@ -165,5 +165,15 @@ async def hotel(client, message):
     
     await send_image(profile, client, message.channel)
 
+@roseworks.secretcommand('dlimages')
+async def dlimages(client, mess):
+    a = 1
+    async for message in client.logs_from(mess.channel):
+        if len(message.attachments)>0:
+            for i in message.attachments:
+                async with await aiohttp.get(i['url']) as response:
+                    Image.open(BytesIO(await response.content.read())).save('{}.png'.format(a))
+                    a += 1
+                    
 
 

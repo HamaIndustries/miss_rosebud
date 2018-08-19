@@ -1,7 +1,9 @@
 import roseworks, rosebud_configs
+from backend import rp
 from modules import big_boys, conversation_hearts, general, kissy, marriage_owo, misty, xwu_nud35
 
-import discord, re, traceback, sys
+import discord, re, traceback, sys, asyncio
+import threading
 
 client = discord.Client()
 trans = rosebud_configs.trans
@@ -40,6 +42,10 @@ async def on_member_remove(member):
 @safety
 @client.event
 async def on_message(message):
+    if message.channel.id == '467294482854051841':
+        return
+
+    '''
     if message.content.startswith('{}updatestatus'.format(prefix)) and message.author.id in (rosebud_config.elid, rosebud_config.wishid):
         await client.change_presence(game=discord.Game(name=message.content.split(' ',1)[1]))
         return
@@ -71,7 +77,7 @@ async def on_message(message):
         
         await client.send_message(message.channel, 'profiles created!')
         return
-    
+    '''
 #----- commands -----
     
     if message.content.startswith(prefix):
@@ -133,5 +139,9 @@ def start():
         else:
             print('config.cfg created, change login token\nIf you recieve this message after changing it, try running the program with argument --debuglogin')
 
+def th(coro, *args, **kwargs):
+    asyncio.run_coroutine_threadsafe(coro(args, kwargs)).result()
+
 if __name__ == '__main__':
-    start()
+    threading.Thread(target=client.run, args=(settings.token,)).start()
+    rp.rolep(client)

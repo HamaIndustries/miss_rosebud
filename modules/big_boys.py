@@ -7,7 +7,7 @@ Admin commands!
 
 kicked = []
 
-@roseworks.admincommand('kick', 'kick [@user]', 'admin')
+@roseworks.admincommand('kick', 'kick [@user]', roseworks.ADMIN)
 async def kick(client, message):
     try:
         assert message.channel.permissions_for(message.author).administrator

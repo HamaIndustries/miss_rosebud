@@ -7,7 +7,7 @@ import discord
 
 
 
-@roseworks.command('daily', 'daily', 'money')
+@roseworks.command('daily', 'daily', roseworks.MONEY)
 async def daily(client, message):
     target = Profile(message.author)
     try:
@@ -18,7 +18,7 @@ async def daily(client, message):
     except utils.TooSoonError as e:
         await client.send_message(message.channel, 'Please wait {:.2f} hours before begging for more {}.'.format(e.waittime.seconds / 3600.0, Profile.currency_name))
 
-@roseworks.command('pay', 'pay [@user]', 'money')
+@roseworks.command('pay', 'pay [@user]', roseworks.MONEY)
 async def pay(client, message):
         payer = Profile(message.author)
         recipient = Profile(message.mentions[0])
@@ -42,7 +42,7 @@ async def pay(client, message):
         else:
             await client.send_message(message.channel, 'Insufficient funds, ya broke cuck.')
 
-@roseworks.command('bal', 'bal', 'money')
+@roseworks.command('bal', 'bal', roseworks.MONEY)
 async def bal(client, message):
     e = discord.Embed(title='{}\'s balance'.format(message.author.name.translate(trans)), description='{}{}'.format(Profile.currency_symbol, Profile(message.author).get_balance()))
     await client.send_message(message.channel, embed=e)

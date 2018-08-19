@@ -6,7 +6,7 @@ import discord
 
 prefix = rosebud_configs.settings.prefix
 
-@roseworks.command('profile', 'profile {{@user}}', 'general')
+@roseworks.command('profile', 'profile {{@user}}', roseworks.GENERAL)
 async def profile(client, message):
     if len(message.mentions) > 0:
         target = message.mentions[0]
@@ -15,9 +15,9 @@ async def profile(client, message):
 
     await client.send_message(message.channel, embed=await Profile(target).get_card_plaintext(client))
 
-@roseworks.command('invite', 'invite', 'general')
+@roseworks.command('invite', 'invite', roseworks.GENERAL)
 async def invite(client, message):
-    await client.send_message(message.channel, 'https://discordapp.com/oauth2/authorize?client_id=464161516212715530&scope=bot')
+    await client.send_message(message.channel, discord.utils.oauth_url(client.id))
 
 @roseworks.secretcommand('bitch')
 async def baka(client, message):

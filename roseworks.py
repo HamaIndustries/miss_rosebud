@@ -1,3 +1,12 @@
+from backend.profiles import Profile
+
+GENERAL = 'info/general'
+MARRIAGE = 'marriage commands'
+IMAGES = 'photoshop fun'
+MONEY = Profile.currency_name
+MISC = 'miscellaneous'
+ADMIN = 'administration'
+
 commands_dict = {}
 def command(name, help='', category='misc'): #misc, general, money, marriage, image
     def real_command_hehe(func):

@@ -17,7 +17,7 @@ wishid = rosebud_configs.wishid
 roseid = rosebud_configs.roseid
 prefix = rosebud_configs.settings.prefix
 
-@roseworks.command('marry', 'marry [@user]', 'marriage')
+@roseworks.command('marry', 'marry [@user]', roseworks.MARRIAGE)
 async def marry(client, message):
     try:
         target = message.mentions[0]
@@ -27,7 +27,7 @@ async def marry(client, message):
         if target.id == message.author.id:
             await client.send_message(message.channel, 'Marrying yourself? This is so sad, Music Baby play despacito')
             return
-        if target.id == '464161516212715530':
+        if target.id == client.user.id:
             await client.send_message(message.channel, 'My robot heart belongs to Queen Wishi. xwu')
             return
         for i in readmarriages():
@@ -45,7 +45,7 @@ async def marry(client, message):
         await client.send_message(message.channel, 'YOU\'RE ALREADY MARRIED CUCK {}'.format(gibberish().upper()))
     
 
-@roseworks.command('acceptmarriage', 'acceptmarriage [@user]', 'marriage')
+@roseworks.command('acceptmarriage', 'acceptmarriage [@user]', roseworks.MARRIAGE)
 async def acceptmarriage(client, message):
     try:
         target = message.mentions[0]
@@ -72,7 +72,7 @@ async def acceptmarriage(client, message):
     except IndexError:
         await client.send_message(message.channel, 'Please specify someone who\'s proposed to you xvo')
 
-@roseworks.command('denymarriage', 'denymarriage [@user]', 'marriage')
+@roseworks.command('denymarriage', 'denymarriage [@user]', roseworks.MARRIAGE)
 async def denymarriage(client, message):
     try:
         target = message.mentions[0]
@@ -84,7 +84,7 @@ async def denymarriage(client, message):
     except KeyError:
         await client.send_message(message.channel, '{} doesn\'t have any proposals right now.'.format(target.name.translate(trans)))
 
-@roseworks.command('divorce', 'divorce [@user]', 'marriage')
+@roseworks.command('divorce', 'divorce [@user]', roseworks.MARRIAGE)
 async def divorce(client, message):
     for i in readmarriages():
         if message.author.id in i:
@@ -100,7 +100,7 @@ async def divorce(client, message):
         return
     await client.send_message(message.channel, 'As if anyone cared enough to get married to you in the first place.')
 
-@roseworks.wishicommand('wishimarry', 'wishimarry [@user]', 'marriage')
+@roseworks.wishicommand('wishimarry', 'wishimarry [@user]', roseworks.MARRIAGE)
 async def wishimarry(client, message):
     target = message.mentions[0]
     wishimarriages = readwmarriages()
@@ -110,7 +110,7 @@ async def wishimarry(client, message):
             return
     if target.id in wishimarriages:
         delta = datetime.now()-wishimarriages[target.id]['anniversary']
-        if target.id == roseid:
+        if target.id == client.user.id:
             await client.send_message(message.channel, 'K-kya!! ( ˘͈ ᵕ ˘͈♡) Well my Queen,, if you insist. I love you so much!! >w<` I\'m so embarrassed and happy aah,,')
             return
         await client.send_message(message.channel, 'Congratulations on marriage #{} in the {} since {} xwu'.format(
@@ -119,13 +119,13 @@ async def wishimarry(client, message):
             wishimarriages[target.id]['anniversary'].strftime("%Y-%m-%d")
             ))
     else:
-        if target.id == roseid:
-            await client.send_message(message.channel, 'K-kya!! ( ˘͈ ᵕ ˘͈♡) Well my Queen,, if you insist. I love you so much!! >w<` I\'m so embarrassed and happy aah,,')
+        if target.id == client.user.id:
+            await client.send_message(message.channel, 'K-kya!! ( ˘͈ ᵕ ˘͈♡) Oh, my records indicate this is our first marriage together. This is the happiest day I can remember!')
         else:
             await client.send_message(message.channel, 'Congratulations on your first marriage with Queen Wishi, <@{}>!'.format(target.id))
     await Stickers.award(target.id, 'WishiMarried')
 
-@roseworks.wishicommand('wishidivorce', 'wishidivorce [@user]', 'marriage')
+@roseworks.wishicommand('wishidivorce', 'wishidivorce [@user]', roseworks.MARRIAGE)
 async def wishidivorce(client, message):
     try:
         target = message.mentions[0]

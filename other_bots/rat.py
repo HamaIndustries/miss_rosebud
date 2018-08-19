@@ -24,11 +24,13 @@ async def on_message(message):
         await client.send_message(message.channel, '*squeak*')
         counter.interval = random.randrange(7, 15)
 
-if __name__ == 'main':
+def start():
+    client.run('NDczNjgyMjAxNzU4NjYyNjU2.DkFfEA.AvF5ZsYmSq53Y20hwKH_fLJ0Ork')
+
+if __name__ == '__main__':
     start()
 
 async def astart():
     start()
 
-def start():
-    client.run('NDczNjgyMjAxNzU4NjYyNjU2.DkFfEA.AvF5ZsYmSq53Y20hwKH_fLJ0Ork')
+
