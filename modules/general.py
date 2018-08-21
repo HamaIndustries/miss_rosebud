@@ -18,7 +18,7 @@ async def profile(client, message):
 @roseworks.command('invite', 'invite', roseworks.GENERAL)
 async def invite(client, message):
     info = await client.application_info()
-    await client.send_message(message.channel, discord.utils.oauth_url(info.id))
+    await client.send_message(message.channel, discord.utils.oauth_url(info.id, permissions=discord.Permissions(permissions=388163)))
 
 @roseworks.secretcommand('bitch')
 async def baka(client, message):
