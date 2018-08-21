@@ -28,7 +28,7 @@ async def c_dm(client, message):
         print('==={}( {} ): {}'.format(message.author.name.translate(trans),message.author.id, '[image]' if message.content == '' else message.content.translate(trans)))
         
 
-@roseworks.command('tellwishi', 'tellwishi {{message}}', roseworks.MISC)
+@roseworks.command('tellwishi', 'tellwishi {message}', roseworks.MISC)
 async def tellwishi(client, message):
     if message.content.startswith('{}tellwishi'.format(prefix)) and not wishid in [i.id for i in message.server.members]:
         await client.send_message(await client.get_user_info(wishid), embed=embed_message(message))

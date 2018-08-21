@@ -123,6 +123,7 @@ async def on_message(message):
                 print('user {} {} fatally executed command {}:'.format(message.author.name.translate(trans), message.author.id, command))
                 print('attempted {}'.format(message.content.translate(trans)))
                 traceback.print_exc()
+                await client.send_message(message.channel, 'usage: {}{}'.format(prefix, availcommands[command]['help']))
     else:
         for i in roseworks.conversations:
             await i(client, message)

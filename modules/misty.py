@@ -1,12 +1,12 @@
 import roseworks, rosebud_configs
 from rosebud_configs import trans
 
-import discord, random, asyncio
+import discord, random, asyncio, shlex
 
 '''
 Miscellaneous commands!
 '''
-@roseworks.command('shakeyshakey', 'shakeyshakey {{cat1|cat2|spinda|tortgle}}', roseworks.MISC)
+@roseworks.command('shakeyshakey', 'shakeyshakey {cat1|cat2|spinda|tortgle}', roseworks.MISC)
 async def shakeyshakey(client, message):
     dances = {
             'cat1': 'https://cdn.discordapp.com/attachments/425046327047487500/474442976802897940/image.gif',
@@ -44,9 +44,23 @@ async def vore(client, message):
     else:
         await client.send_message(message.channel, '{} vored {}! I hope they lubed up first. X_O'.format(message.author.mention, target.mention))
 
-@roseworks.admincommand('getroleusers', 'getroleusers [role]', roseworks.ADMIN)
+@roseworks.admincommand('getroleusers', 'getroleusers [role] {roles...} (Use quotes for multi-word arguments)', roseworks.MISC)
 async def getroles(client, message):
-    for member in message.server.members:
-        for role in member.roles: 
-            if role.name == message.content.split()[1] or role.id == message.content.split()[1]:
-                await client.send_message(message.channel, member.name.translate(trans))
+    users = {}
+    for item in shlex.split(message.content)[1:]:
+        users[item] = []
+        for member in message.server.members:
+            for role in member.roles: 
+                if role.name == item or role.id == item:
+                    users[item].append(member.name.translate(trans))
+        if users[item]:
+            users[item].sort()
+        else:
+            await client.send_message(message.channel, 'Role {} not found'.format(item))
+            del users[item]
+    if not users:
+        return
+    e = discord.Embed(title='Role users:')
+    for item in users:
+        e.add_field(name=item, value='\n'.join(users[item]), inline=False)
+    await client.send_message(message.channel, embed=e)

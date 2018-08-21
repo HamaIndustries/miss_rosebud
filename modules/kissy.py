@@ -1,11 +1,9 @@
 import roseworks
 from backend.profiles import Profile
-from backend import utils
+from backend import utils, profiles
 from rosebud_configs import wishid, trans
 
 import discord
-
-
 
 @roseworks.command('daily', 'daily', roseworks.MONEY)
 async def daily(client, message):
@@ -46,3 +44,30 @@ async def pay(client, message):
 async def bal(client, message):
     e = discord.Embed(title='{}\'s balance'.format(message.author.name.translate(trans)), description='{}{}'.format(Profile.currency_symbol, Profile(message.author).get_balance()))
     await client.send_message(message.channel, embed=e)
+
+@roseworks.command('rank', 'rank {Length < 25} {--all, --wishi}', roseworks.MONEY)
+async def rank(client, message):
+    try:
+        length = min(int(message.content.split()[1]), 25)
+    except:
+        length = 10
+    all = '--all' in message.content
+    wishi = '--wishi' in message.content
+    ranking = []
+    dup_detector=[]
+    memberlist = client.get_all_members() if all else message.server.members
+    async for profile in profiles.get_all_profiles(memberlist):
+        if profile.user.bot or profile.id in dup_detector or profile.id == wishid: continue
+        dup_detector.append(profile.id)
+        ranking.append([profile.name, profile.get_balance(), 0 if isinstance(profile.info['wishimarriages'], int) else profile.info['wishimarriages']['marriages']])
+    ranking.sort(key=lambda x: (x[2] if wishi else x[1]), reverse=True)
+    wprofile = Profile(await client.get_user_info(wishid), True)
+    ranking.insert(0,[wprofile.name, wprofile.get_balance(), 0 if isinstance(profile.info['wishimarriages'], int) else wprofile.info['wishimarriages']['marriages']])
+    e = discord.Embed(title='Top {} users for {} by {}:'.format(length, 'all servers' if all else 'this server', 'wishimarriages' if wishi else 'wealth'), color=utils.p_pink)
+    for i in ranking[:length]:
+        e.add_field(name=i[0], value='{}: {}, Wishi Marriages: {}'.format(Profile.currency_name.capitalize(), i[1],i[2]), inline=False)
+    await client.send_message(message.channel, embed=e)
+    
+
+    
+        

@@ -12,7 +12,7 @@ Image commands!
 
 settings = rosebud_configs.settings
 
-@roseworks.command('wishify', 'wishify {{url}} {{color hex}}', roseworks.IMAGES)
+@roseworks.command('wishify', 'wishify {url} {color hex}', roseworks.IMAGES)
 async def wishif(client, message):
     print(message.author.id)
     arg = message.content.strip().split(' ')
@@ -63,7 +63,7 @@ async def dlemoji(client, message):
     response = requests.get(discord.utils.get(client.get_all_emojis(), name = message.content.split(':')[1]).url)
     await send_image(Image.open(BytesIO(response.content)), client, message.channel)
 
-@roseworks.command('dlprofile', 'dlprofile {{@user}}', roseworks.GENERAL)
+@roseworks.command('dlprofile', 'dlprofile {@user}', roseworks.GENERAL)
 async def dlprofile(client, message):
     if len(message.mentions) > 0:
         target = message.mentions[0]
@@ -75,7 +75,7 @@ async def dlprofile(client, message):
 
     await send_image(profile, client, message.channel)
 
-@roseworks.command('gay', 'gay {{@user|url}}', roseworks.IMAGES)
+@roseworks.command('gay', 'gay {@user|url}', roseworks.IMAGES)
 async def gay(client, message):
     if len(message.mentions) > 0:
         target = message.mentions[0]
@@ -104,7 +104,7 @@ async def gay(client, message):
     
     await send_image(profile, client, message.channel)
 
-@roseworks.command('nikki', 'nikki {{@user|url}}', roseworks.IMAGES)
+@roseworks.command('nikki', 'nikki {@user|url}', roseworks.IMAGES)
 async def nikki(client, message):
     if len(message.mentions) > 0:
         target = message.mentions[0]
@@ -136,7 +136,7 @@ async def nikki(client, message):
     
     await send_image(canvas, client, message.channel)
 
-@roseworks.command('hotel', 'hotel {{@user|url}}', roseworks.IMAGES)
+@roseworks.command('hotel', 'hotel {@user|url}', roseworks.IMAGES)
 async def hotel(client, message):
     if len(message.mentions) > 0:
         target = message.mentions[0]

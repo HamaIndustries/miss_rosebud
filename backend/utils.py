@@ -3,6 +3,8 @@ import rosebud_configs
 import os, random
 from PIL import Image
 
+p_pink = 0xffd1dc
+
 async def silentremove(filename):
     try:
         os.remove(filename)

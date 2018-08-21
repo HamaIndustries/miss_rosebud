@@ -1,6 +1,6 @@
 from PIL import Image
 from io import BytesIO
-from discord import Embed
+from discord import Embed, NotFound
 from datetime import datetime
 
 import rosebud_configs
@@ -32,12 +32,12 @@ class Profile():
     currency_symbol = '₪'
     daily_range = settings.money_range
     
-    def __init__(self, user):
+    def __init__(self, user, suppress_override=False):
         self.user = user
         self.id = user.id
         self.name = user.name.translate(trans)
         self.info = {}
-        self.load_profile(user, int(settings.suppress_loading_messages))
+        self.load_profile(user, int(settings.suppress_loading_messages) or suppress_override)
         
     def load_profile(self, user, suppress_messages = False):
         self.profileurl = user.avatar_url if user.avatar_url != '' else user.default_avatar_url
@@ -188,7 +188,7 @@ def load_user_info(id, suppress_messages = False):
                     Profile.currency_name: 0,
                     'lastdaily': datetime.min
                     }
-    save_user_info(id, info)
+            save_user_info(id, info)
     if not suppress_messages:
         print('successfully created user profile for {}'.format(id))
     return info
@@ -201,3 +201,14 @@ def save_user_info(id, entry):
     with open('{}/userlist.pk'.format(settings.home_dir),'wb') as f:
         userlist[id] = entry
         pickle.dump(userlist, f)
+
+def get_all_users():
+    with open('{}/userlist.pk'.format(settings.home_dir),'rb') as f:
+        yield from pickle.load(f)
+
+async def get_all_profiles(memberlist):
+    with open('{}/userlist.pk'.format(settings.home_dir),'rb') as f:
+        for member in memberlist:
+            yield Profile(member, True)
+            
+            
