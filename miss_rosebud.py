@@ -124,6 +124,11 @@ async def on_message(message):
                 print('attempted {}'.format(message.content.translate(trans)))
                 traceback.print_exc()
                 await client.send_message(message.channel, 'usage: {}{}'.format(prefix, availcommands[command]['help']))
+            if len(message.attachments) > 0 or re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message.content):
+                try:
+                    client.delete_message(message)
+                except:
+                    traceback.print_exc()
     else:
         for i in roseworks.conversations:
             await i(client, message)
@@ -140,9 +145,9 @@ def start():
         else:
             print('config.cfg created, change login token\nIf you recieve this message after changing it, try running the program with argument --debuglogin')
 
-def th(coro, *args, **kwargs):
-    asyncio.run_coroutine_threadsafe(coro(args, kwargs)).result()
+def th(loop, coro, *args, **kwargs):
+    asyncio.run_coroutine_threadsafe(coro(args, kwargs), loop).result()
 
 if __name__ == '__main__':
-    threading.Thread(target=client.run, args=(settings.token,)).start()
-    rp.rolep(client)
+    threading.Thread(target=client.run, args=(settings.token,)).start() #allows me to dynamically access/modify code
+    rp.rolep(client, asyncio.get_event_loop())

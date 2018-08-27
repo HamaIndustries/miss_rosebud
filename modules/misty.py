@@ -1,7 +1,7 @@
 import roseworks, rosebud_configs
 from rosebud_configs import trans
 
-import discord, random, asyncio, shlex
+import discord, random, asyncio
 
 '''
 Miscellaneous commands!
@@ -12,7 +12,8 @@ async def shakeyshakey(client, message):
             'cat1': 'https://cdn.discordapp.com/attachments/425046327047487500/474442976802897940/image.gif',
             'cat2': 'https://cdn.discordapp.com/attachments/425046327047487500/474443228364537856/fuck_this_pussy_boy.gif',
             'spinda': 'https://play.pokemonshowdown.com/sprites/xyani/spinda.gif',
-            'tortgle': 'https://cdn.discordapp.com/attachments/425057165959495690/472646921060876288/received_967505780079985.gif'
+            'tortgle': 'https://cdn.discordapp.com/attachments/425057165959495690/472646921060876288/received_967505780079985.gif',
+            'despato': 'https://cdn.discordapp.com/attachments/425046327047487500/482027890574360576/Untitled.gif'
             }
     try:
         dance = dances[message.content.split()[1]]
@@ -44,23 +45,7 @@ async def vore(client, message):
     else:
         await client.send_message(message.channel, '{} vored {}! I hope they lubed up first. X_O'.format(message.author.mention, target.mention))
 
-@roseworks.admincommand('getroleusers', 'getroleusers [role] {roles...} (Use quotes for multi-word arguments)', roseworks.MISC)
-async def getroles(client, message):
-    users = {}
-    for item in shlex.split(message.content)[1:]:
-        users[item] = []
-        for member in message.server.members:
-            for role in member.roles: 
-                if role.name == item or role.id == item:
-                    users[item].append(member.name.translate(trans))
-        if users[item]:
-            users[item].sort()
-        else:
-            await client.send_message(message.channel, 'Role {} not found'.format(item))
-            del users[item]
-    if not users:
-        return
-    e = discord.Embed(title='Role users:')
-    for item in users:
-        e.add_field(name=item, value='\n'.join(users[item]), inline=False)
-    await client.send_message(message.channel, embed=e)
+@roseworks.command('dancepacito', 'dancepacito', roseworks.MISC)
+async def despacito(client, message):
+    desp = discord.utils.get(client.get_all_emojis(), name='dancepacito')
+    await client.send_message(message.channel, '<a:{}:{}>'.format(desp.name, desp.id))

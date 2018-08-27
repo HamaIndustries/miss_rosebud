@@ -165,6 +165,32 @@ async def hotel(client, message):
     
     await send_image(profile, client, message.channel)
 
+@roseworks.command('!', '! {@user|url}', roseworks.IMAGES)
+async def created_by_hideo_kojima(client, message):
+    if len(message.mentions) > 0:
+        target = message.mentions[0]
+    else:
+        target = message.author
+
+    try:
+        if len(message.attachments)>0:
+            imurl = message.attachments[0]['url']
+        else:
+            imurl = message.content.split()[1]
+        response = requests.get(imurl)
+    except:
+        response = requests.get(target.avatar_url if message.author.avatar_url != '' else target.default_avatar_url)
+        
+    profile = Image.open(BytesIO(response.content))
+    overlay = Image.open('{}/created.png'.format(settings.home_dir))
+    ratio = profile.size[1]/(7*overlay.size[1])
+    if profile.size[0] <= int(overlay.size[0]*ratio) + 100*ratio:
+        ratio *= .75
+    overlay = overlay.resize((int(overlay.size[0]*ratio), int(overlay.size[1]*ratio)), Image.ANTIALIAS)
+    profile.paste(overlay, (profile.size[0]-overlay.size[0]-int(100*ratio),profile.size[1]-overlay.size[1]-int(50*ratio)), overlay)
+    
+    await send_image(profile, client, message.channel)
+
 @roseworks.secretcommand('dlimages')
 async def dlimages(client, mess):
     a = 1

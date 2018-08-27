@@ -1,9 +1,9 @@
 from tkinter import *
-import threading, discord, traceback, asyncio
-import rosebud_configs
+import threading, discord, traceback, asyncio, time
 fields = 'id', 'message'
 
 client = ''
+trans = dict.fromkeys(range(0x10000, sys.maxunicode + 1), 0xfffd)
 
 def fetch(entries):
     dic = {}
@@ -11,9 +11,9 @@ def fetch(entries):
         dic[entry[0]] = entry[1].get()
     spoo(client, '{} {}'.format(dic['id'].strip(), dic['message']))
     try:
-        print('===Rosebud to {}( {} ): {}'.format(discord.utils.get(client.get_all_members(), id=dic['id']).name.translate(rosebud_configs.trans),dic['id'], dic['message']))
+        print('===Rosebud to {}( {} ): {}'.format(discord.utils.get(client.get_all_members(), id=dic['id']).name.translate(trans),dic['id'], dic['message']))
     except AttributeError:
-        print('===Rosebud to {}( {} ): {}'.format(discord.utils.get(client.get_all_channels(), id=dic['id']).name.translate(rosebud_configs.trans),dic['id'], dic['message']))
+        print('===Rosebud to {}( {} ): {}'.format(discord.utils.get(client.get_all_channels(), id=dic['id']).name.translate(trans),dic['id'], dic['message']))
     global root
     entries[1][1].delete(0, 'end')
 
@@ -29,12 +29,7 @@ def makeform(root, fields):
       entries.append((field, ent))
    return entries
 
-root = Tk()
-ents = makeform(root, fields)
-root.bind('<Return>', (lambda event, e=ents: fetch(e)))   
-b1 = Button(root, text='Send',
-      command=(lambda e=ents: fetch(e)))
-b1.pack(side=LEFT, padx=5, pady=5)
+
 
 def spoo(client, inp):
     try:
@@ -51,7 +46,15 @@ def spoo(client, inp):
         print('spook issue: vvv--------------------------- vvv')
         traceback.print_exc()
 
-def rolep(cli):
+def rolep(cli, loop):
+    asyncio.run_coroutine_threadsafe(cli.wait_until_ready(), loop).result()
+    root = Tk()
+    ents = makeform(root, fields)
+    root.bind('<Return>', (lambda event, e=ents: fetch(e)))   
+    b1 = Button(root, text='Send',
+          command=(lambda e=ents: fetch(e)))
+    b1.pack(side=LEFT, padx=5, pady=5)
+    root.title(cli.user.name)
     global client
     client = cli
     threading.Thread(target=root.mainloop).start()
