@@ -10,13 +10,13 @@ async def daily(client, message):
     target = Profile(message.author)
     try:
         if message.author.id == wishid:
-            await client.send_message(message.channel, 'Added {} {} to your account, my Queen. Feel free to ask for more. xwu'.format(await target.daily(), Profile.currency_name))
+            await client.send_message(message.channel, 'I\'ve added {} {} to your account, Queen Wishi. Please don\'t hesitate to ask for more, if it pleases you.'.format(await target.daily(), Profile.currency_name))
             return
-        await client.send_message(message.channel, 'Added {} {} to your account for today!'.format(await target.daily(), Profile.currency_name))
+        await client.send_message(message.channel, 'Added {} {} to your account for today. Ask Miss Celosia for chips!'.format(await target.daily(), Profile.currency_name))
     except utils.TooSoonError as e:
-        await client.send_message(message.channel, 'Please wait {:.2f} hours before begging for more {}.'.format(e.waittime.seconds / 3600.0, Profile.currency_name))
+        await client.send_message(message.channel, 'Wait {:.2f} hours before begging for more {}.'.format(e.waittime.seconds / 3600.0, Profile.currency_name))
 
-@roseworks.command('pay', 'pay [@user]', roseworks.MONEY)
+@roseworks.command('pay', 'pay [@user] [amount]', roseworks.MONEY)
 async def pay(client, message):
         payer = Profile(message.author)
         recipient = Profile(message.mentions[0])
@@ -25,20 +25,20 @@ async def pay(client, message):
             recipient.amend_currency(amount)
             await client.send_message(message.channel, 'Queen Wishi has amended {}\'s balance by {}{}.'.format(message.author.mention, message.mentions[0].mention, Profile.currency_symbol, amount))
         elif amount <= 0:
-            await client.send_message(message.channel, 'You can\'t pay {} idiot {}.'.format(amount, utils.gibberish()))
+            await client.send_message(message.channel, 'You can\'t pay {} fool.'.format(amount))
             return
         elif payer.id == recipient.id:
-            await client.send_message(message.channel, 'Trying to defraud me? Nice try idiot.')
+            await client.send_message(message.channel, 'Trying to defraud the casino? You should know better than to risk what\'s most important to you.')
             return
         elif message.mentions[0].bot:
-            await client.send_message(message.channel, 'You can\'t even buy a bot\'s love, small dick energy cuck.')
+            await client.send_message(message.channel, 'The only \'bot who can be paid off is me. Meet me in room 7A in the next five minutes and I might charge you less.')
             return
         elif payer.get_balance() >= amount:
             payer.amend_currency(-amount)
             recipient.amend_currency(amount)
             await client.send_message(message.channel, '{} has paid {} {}{}'.format(message.author.mention, message.mentions[0].mention, Profile.currency_symbol, amount))
         else:
-            await client.send_message(message.channel, 'Insufficient funds, ya broke cuck.')
+            await client.send_message(message.channel, 'You can\'t afford to pay that. A round on the tables, perhaps?')
 
 @roseworks.command('bal', 'bal', roseworks.MONEY)
 async def bal(client, message):

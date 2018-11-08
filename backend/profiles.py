@@ -30,6 +30,8 @@ class Profile():
     '''
     currency_name = 'kisses'
     currency_symbol = '₪'
+    gamble_currency_name = 'chips'
+    gamble_currency_symbol = '♠'
     daily_range = settings.money_range
     
     def __init__(self, user, suppress_override=False):
@@ -62,10 +64,13 @@ class Profile():
         self.save_profile('Reset daily for {}'.format(self.id))
         return amount
         
-    def amend_currency(self, amount):
-        self.info[self.currency_name] += amount
-        self.save_profile()
-
+    def amend_currency(self, amount, typ=currency_name):
+        try:
+            self.info[typ] += amount
+            self.save_profile()
+        except KeyError:
+            print('ERROR: Amendable currency {} does not exist!'.format(typ))
+        
     def get_balance(self):
         return int(self.info[self.currency_name])
             
@@ -96,6 +101,7 @@ class Profile():
         emb.add_field(name='Wishi Marriages:', value=wishimarriages, inline=False)
         emb.add_field(name='Inventory', value=self.info['inventory'], inline=False)
         emb.add_field(name=self.currency_name, value='{} {}'.format(self.currency_symbol,self.info[self.currency_name]), inline=False)
+        emb.add_field(name=self.gamble_currency_name, value='{} {}'.format(self.gamble_currency_symbol,self.info[self.gamble_currency_name]), inline=False)
         return emb
     
     def get_card(self):
@@ -186,7 +192,8 @@ def load_user_info(id, suppress_messages = False):
                     #'wishimarriages': bidict.readwmarriages()[id] if id in bidict.readwmarriages() else 0,
                     'inventory': {},
                     Profile.currency_name: 0,
-                    'lastdaily': datetime.min
+                    'lastdaily': datetime.min,
+                    Profile.gamble_currency_name : 0
                     }
             save_user_info(id, info)
     if not suppress_messages:
@@ -210,5 +217,20 @@ async def get_all_profiles(memberlist):
     with open('{}/userlist.pk'.format(settings.home_dir),'rb') as f:
         for member in memberlist:
             yield Profile(member, True)
+
+def add_category(cat : str, default = None):
+    userlist = ''
+    with open('{}/userlist.pk'.format(settings.home_dir),'rb') as f:
+        userlist = pickle.load(f)
+
+    with open('{}/userlist.pk'.format(settings.home_dir),'wb') as f:
+        for i in userlist:
+            try:
+                userlist[i][cat]
+                print('category {} already exists')
+                return
+            except KeyError:
+                 userlist[i][cat] = default
+        pickle.dump(userlist, f)
             
             

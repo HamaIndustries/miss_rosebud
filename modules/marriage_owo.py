@@ -4,7 +4,7 @@ from bidict import marriage
 from backend.profiles import Profile, Stickers
 from backend.utils import TooSoonError, gibberish
 
-import pickle, traceback
+import pickle, traceback, asyncio
 from datetime import datetime
 
 '''
@@ -25,10 +25,12 @@ async def marry(client, message):
             await client.send_message(message.channel, 'This person is too ugly to be loved.')
             return
         if target.id == message.author.id:
-            await client.send_message(message.channel, 'Marrying yourself? This is so sad, Music Baby play despacito')
+            await client.send_message(message.channel, 'While we follow no nation\'s laws, Casino policy dictates that you cannot marry yourself.')
+            asyncio.sleep(2)
+            await client.send_message(message.channel, 'If you were marrying yourself for physical reasons, my services are always available in the back after sunset. You may order them at the exchange counter.')
             return
         if target.id == client.user.id:
-            await client.send_message(message.channel, 'My robot heart belongs to Queen Wishi. xwu')
+            await client.send_message(message.channel, 'My robot heart belongs to Queen Wishi. My body, however, will be waiting in the back for you. If you have the {}.')
             return
         for i in readmarriages():
             if target.id in i:
@@ -40,9 +42,9 @@ async def marry(client, message):
         await client.send_message(message.channel, '<@{}>, will you accept <@{}>\'s proposal? Use {}acceptmarriage [user] or {}denymarriage [user].'.format(target.id, message.author.id, prefix, prefix))
         
     except ThemMarriedError:
-        await client.send_message(message.channel, 'The person you\'re trying to marry is already taken, bucko. ;3€')
+        await client.send_message(message.channel, 'The person you\'re trying to marry is already in love with someone else. If you seek physical amenities, I provide very affordable services for the lonely.')
     except YouMarriedError:
-        await client.send_message(message.channel, 'YOU\'RE ALREADY MARRIED CUCK {}'.format(gibberish().upper()))
+        await client.send_message(message.channel, 'You\'ve already given your heart to another. At least try to look loyal.')
     
 
 @roseworks.command('acceptmarriage', 'acceptmarriage [@user]', roseworks.MARRIAGE)
@@ -57,30 +59,30 @@ async def acceptmarriage(client, message):
         if readproposals()[target.id] == message.author.id:
             print('marrying...')
             acceptmarriage(message.author.id, target.id)
-            await client.send_message(message.channel, 'Congratulations on your marriage!! xvo')
+            await client.send_message(message.channel, 'Congratulations on your espousal. If you choose the honeymoon suite tonight, I will be there, should you pay the added entertainment fee.')
             print('married {} to {}'.format(message.author.name.translate(trans), target.name.translate(trans)))
             await Stickers.award(target.id, 'Married')
             await Stickers.award(message.author.id, 'Married')
             return
-        await client.send_message(message.channel, 'You haven\'t been proposed to by them idiot {}'.format(utils.gibberish()))
+        await client.send_message(message.channel, 'You haven\'t been proposed to by this person. Perhaps winning more {} may cause them to consider you?'.format(Profile.gamble_currency_name))
     except KeyError:
-        await client.send_message(message.channel, 'They haven\'t proposed to anyone... yet. xwo'.format(utils.gibberish()))
+        await client.send_message(message.channel, 'However, the Casino does offer marriage and reception venues, including my services for bachelor/ette parties'.format(utils.gibberish()))
     except ThemMarriedError:
-        await client.send_message(message.channel, 'The person you\'re trying to marry is already taken, bucko. ;3€')
+        await client.send_message(message.channel, 'The person you\'re trying to marry is already in love with someone else. If you seek physical amenities, I provide very affordable services for the lonely.')
     except YouMarriedError:
-        await client.send_message(message.channel, 'YOU\'RE ALREADY MARRIED CUCK {}'.format(utils.gibberish().upper()))
+        await client.send_message(message.channel, 'You\'ve already given your heart to another. At least try to look loyal.'.format(utils.gibberish().upper()))
     except IndexError:
-        await client.send_message(message.channel, 'Please specify someone who\'s proposed to you xvo')
+        await client.send_message(message.channel, 'Please specify someone who\'s offered their soul to you.')
 
 @roseworks.command('denymarriage', 'denymarriage [@user]', roseworks.MARRIAGE)
 async def denymarriage(client, message):
     try:
         target = message.mentions[0]
         if readproposals()[target.id] == message.author.id:
-            await client.send_message(message.channel, 'Get cucked {}'.format(target.name.translate(trans)))
+            await client.send_message(message.channel, 'You\'ve been denied, {}. Don\'t worry however, the Casino offers drinking, gambling and escort services, if you need assistance in dulling the pain.'.format(target.name.translate(trans)))
             print('{} denied {}'.format(message.author.name.translate(trans), target.name.translate(trans)))
             return
-        await client.send_message(message.channel, 'Pff, you wish they\'d propose to you, cuck.')
+        await client.send_message(message.channel, 'Please deny someone who cares enough to offer.')
     except KeyError:
         await client.send_message(message.channel, '{} doesn\'t have any proposals right now.'.format(target.name.translate(trans)))
 
@@ -90,15 +92,15 @@ async def divorce(client, message):
         if message.author.id in i:
             print(message.author.id)
             print(i)
-            await client.send_message(message.channel, 'Damn, relationship ended with <@{}>. :pensive: That\'s so sad, can we get 50 likes? At least you have your Queen Wishi as a spouse, probably. If you deserve it. ;3€'.format(readmarriages()[message.author.id]))
+            await client.send_message(message.channel, 'Your marriage has been nullified, {}. I will be offering complimentary backroom services for you, if you paid the deposit following your wedding.'.format(readmarriages()[message.author.id]))
             delmarriage(message.author.id)
             print('{} was divorced'.format(message.author.name.translate(trans)))
             await Stickers.award(message.author.id, 'Divorced')
             return
     if message.author.id == rosebud_configs.wishid:
-        await client.send_message(message.channel, 'You are currently unmarried, my Queen! xwu I know a lonely little robot who\'d make a good spouse though...')
+        await client.send_message(message.channel, 'You are currently unmarried, Queen Wishi.')
         return
-    await client.send_message(message.channel, 'As if anyone cared enough to get married to you in the first place.')
+    await client.send_message(message.channel, 'I\'d do that, if someone wanted to spend any {} on you in the first place.')
 
 @roseworks.wishicommand('wishimarry', 'wishimarry [@user]', roseworks.MARRIAGE)
 async def wishimarry(client, message):
@@ -106,23 +108,22 @@ async def wishimarry(client, message):
     wishimarriages = readwmarriages()
     writewmarriage(target.id)
     if target.id == '447249858265481226':
-            await client.send_message(message.channel, 'This person is too ugly to be loved.')
-            return
+            await client.send_message(message.channel, 'This person is too ugly to be loved. I trust you know what you\'re doing, Queen Wishi.')
     if target.id in wishimarriages:
         delta = datetime.now()-wishimarriages[target.id]['anniversary']
         if target.id == client.user.id:
-            await client.send_message(message.channel, 'K-kya!! ( ˘͈ ᵕ ˘͈♡) Well my Queen,, if you insist. I love you so much!! >w<` I\'m so embarrassed and happy aah,,')
+            await client.send_message(message.channel, 'K-kya,, ( ˘͈ ᵕ ˘͈♡) --Ahem, yes of course, Queen Wishi. Another marriage has been registered between us.')
             return
-        await client.send_message(message.channel, 'Congratulations on marriage #{} in the {} since {} xwu'.format(
+        await client.send_message(message.channel, 'Congratulations on marriage #{} in the {} since {}'.format(
             wishimarriages[target.id]['marriages']+1,
             "{} day(s) and {} seconds".format(delta.days, delta.seconds),
             wishimarriages[target.id]['anniversary'].strftime("%Y-%m-%d")
             ))
     else:
         if target.id == client.user.id:
-            await client.send_message(message.channel, 'K-kya!! ( ˘͈ ᵕ ˘͈♡) Oh, my records indicate this is our first marriage together. This is the happiest day I can remember!')
+            await client.send_message(message.channel, 'K-kya,, ( ˘͈ ᵕ ˘͈♡) --Ahem, yes of course, Queen Wishi. \nOh, my records indicate this is our first marriage together. This is the happiest day I\'ve experienced in current memory.')
         else:
-            await client.send_message(message.channel, 'Congratulations on your first marriage with Queen Wishi, <@{}>!'.format(target.id))
+            await client.send_message(message.channel, 'Congratulations on your first marriage with Queen Wishi, <@{}>. Please pick up your complimentary drink ticket and chip discount from the exchange desk.'.format(target.id))
     await Stickers.award(target.id, 'WishiMarried')
 
 @roseworks.wishicommand('wishidivorce', 'wishidivorce [@user]', roseworks.MARRIAGE)
@@ -130,12 +131,12 @@ async def wishidivorce(client, message):
     try:
         target = message.mentions[0]
         delwmarriage(target.id)
-        await client.send_message(message.channel, 'Cya thottie ;3c')
+        await client.send_message(message.channel, 'You have earned the Queen\'s ire. Please ensure that it does not happen again.')
         await Stickers.unaward(target.id, 'WishiMarried')
     except KeyError:
-        await client.send_message(message.channel, 'You\'re not married to them yet, my Queen.')
+        await client.send_message(message.channel, 'You\'re not married to them yet, Queen Wishi.')
     except IndexError:
-        await client.send_message(message.channel, 'Please specify a thot to destroy, my Queen!')
+        await client.send_message(message.channel, 'Please specify a patron to excommunicate, Queen Wishi!')
 
 def readproposals():
     with open('{}/proposals.pk'.format(settings.home_dir), 'rb') as f:

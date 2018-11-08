@@ -34,7 +34,7 @@ async def wishif(client, message):
             color = 'ffd1dc'
         print(imurl)
     else:
-        await client.send_message(message.channel, 'Please specify an image to wishify! xwu\"')
+        await client.send_message(message.channel, 'Please specify an image to wishify.')
         return
 
     #open and convert to PNG
@@ -48,7 +48,7 @@ async def wishif(client, message):
     try:
         colored = wishify.colorify(im, color)
     except MemoryError:
-        await client.send_message(message.channel, 'It\'s too big for me! \_(´ཀ`」 ∠)')
+        await client.send_message(message.channel, 'It\'s too big for me! \_(´ཀ`」 ∠) ...If you pay the escort fee, we can try again in the back rooms.')
     except Exception as e:
         print('colorify exception: {}'.format(repr(e)))
     
@@ -58,7 +58,7 @@ async def wishif(client, message):
 
     #await client.send_message(message.channel, message.embeds[0].image.url)
 
-@roseworks.command('dlemoji', 'dlemoji [emoji]', roseworks.IMAGES)
+@roseworks.command('dlemoji', 'dlemoji [custom emoji]', roseworks.IMAGES)
 async def dlemoji(client, message):
     response = requests.get(discord.utils.get(client.get_all_emojis(), name = message.content.split(':')[1]).url)
     await send_image(Image.open(BytesIO(response.content)), client, message.channel)

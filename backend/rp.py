@@ -2,19 +2,24 @@ from tkinter import *
 import threading, discord, traceback, asyncio, time
 fields = 'id', 'message'
 
-client = ''
+
 trans = dict.fromkeys(range(0x10000, sys.maxunicode + 1), 0xfffd)
+
+class bot_info():
+    client = ''
 
 def fetch(entries):
     dic = {}
     for entry in entries:
         dic[entry[0]] = entry[1].get()
-    spoo(client, '{} {}'.format(dic['id'].strip(), dic['message']))
+    spoo(bot_info.client, '{} {}'.format(dic['id'].strip(), dic['message']))
     try:
-        print('===Rosebud to {}( {} ): {}'.format(discord.utils.get(client.get_all_members(), id=dic['id']).name.translate(trans),dic['id'], dic['message']))
+        print('==={} to {}( {} ): {}'.format(bot_info.client.user.name, discord.utils.get(bot_info.client.get_all_members(), id=dic['id']).name.translate(trans),dic['id'], dic['message']))
     except AttributeError:
-        print('===Rosebud to {}( {} ): {}'.format(discord.utils.get(client.get_all_channels(), id=dic['id']).name.translate(trans),dic['id'], dic['message']))
-    global root
+        try:
+            print('==={} to {}( {} ): {}'.format(bot_info.client.user.name, discord.utils.get(bot_info.client.get_all_channels(), id=dic['id']).name.translate(trans),dic['id'], dic['message']))
+        except AttributeError:
+            print('Unable to send message, bot probably not in server/shared server with recipient.')
     entries[1][1].delete(0, 'end')
 
 def makeform(root, fields):
@@ -31,7 +36,7 @@ def makeform(root, fields):
 
 
 
-def spoo(client, inp):
+def spoo(client, inp): #spooky bot talking
     try:
         target = discord.utils.get(client.get_all_members(), id=inp.split(' ', maxsplit=1)[0])
         if target == None:
@@ -55,6 +60,5 @@ def rolep(cli, loop):
           command=(lambda e=ents: fetch(e)))
     b1.pack(side=LEFT, padx=5, pady=5)
     root.title(cli.user.name)
-    global client
-    client = cli
+    bot_info.client = cli
     threading.Thread(target=root.mainloop).start()

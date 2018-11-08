@@ -15,11 +15,11 @@ async def kick(client, message):
         for i in message.mentions:
             await client.kick(i)
             kicked.append(i.id)
-        await client.send_message(message.channel, 'Butts kicked.')
+        await client.send_message(message.channel, 'The bouncers have been notified. {}{} has been escorted accordingly.'.format(message.mentions[0].name, ' and company' if len(message.mentions) > 1 else ''))
     except AssertionError:
-        await client.send_message(message.channel, 'Command only authorized for admins against people with roles lower than mine! smh cmh')
+        await client.send_message(message.channel, 'This command is only authorized for admins against people with roles lower than mine.')
     except discord.Forbidden:
-        await client.send_message(message.channel, 'You haven\'t given me that power. Command only authorized for admins against people with roles lower than mine. ( xmu)')
+        await client.send_message(message.channel, 'You haven\'t given me that power. Command only authorized for admins against people with roles lower than mine.')
 
 @roseworks.admincommand('getroleusers', 'getroleusers [role] {roles...} (Use quotes for multi-word arguments)', roseworks.ADMIN)
 async def getroles(client, message):
@@ -41,3 +41,4 @@ async def getroles(client, message):
     for item in users:
         e.add_field(name=item, value='\n'.join(users[item]), inline=False)
     await client.send_message(message.channel, embed=e)
+

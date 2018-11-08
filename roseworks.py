@@ -6,11 +6,14 @@ IMAGES = 'photoshop fun'
 MONEY = Profile.currency_name
 MISC = 'miscellaneous'
 ADMIN = 'administration'
+CASINO = 'casino'
 
+casinocommands_dict = {}
 commands_dict = {}
 def command(name, help='', category='misc'): #misc, general, money, marriage, image
     def real_command_hehe(func):
-        commands_dict[name]={
+        modding_dict = casinocommands_dict if category == CASINO else commands_dict
+        modding_dict[name]={
                             'command':func,
                             'help':help,
                             'category':category

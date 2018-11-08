@@ -34,18 +34,15 @@ async def tellwishi(client, message):
         await client.send_message(await client.get_user_info(wishid), embed=embed_message(message))
         print('{} to wishi: {}'.format(message.author.name.translate(trans), message.content.translate(trans).replace('{}tellwishi'.format(prefix), '')))
     else:
-        await client.send_message(message.channel, 'This command only available in servers Queen Wishi is not in! (aka bad servers xvo)')
+        await client.send_message(message.channel, 'This command is only available in servers Queen Wishi is not in.')
 
 @roseworks.conversation()
 async def converse(client, message):
     if ('WHO\'S YOUR DADDY' in message.content.upper() or 'WHO\'S YOUR BIG DADDY' in message.content.upper()) and message.author.id == wishid:
-        await client.send_message(message.channel, "Hoshi!")
+        await client.send_message(message.channel, "Queen Wishi.")
 
     elif message.content.upper().startswith('I MADE') or message.content.upper().startswith('TODAY I'):
-        await client.send_message(message.channel, random.choice(['Ooh', utils.gibberish()]))
-
-    elif 'SEX' in message.content.upper() or 'EAR RAPE' in message.content.upper():
-        await client.send_message(message.channel, discord.utils.get(client.get_all_emojis(), name='repent'))
+        await client.send_message(message.channel, random.choice(['How interesting.', 'I see.', 'Fascinating.']))
 
     elif 'LOL' in message.content.upper().replace(' ',''):
         await client.add_reaction(message, discord.utils.get(client.get_all_emojis(), name='despacito'))

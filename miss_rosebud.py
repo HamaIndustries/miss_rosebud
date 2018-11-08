@@ -1,13 +1,19 @@
 import roseworks, rosebud_configs
+#from full_house import miss_celosia
 from backend import rp
 from modules import big_boys, conversation_hearts, general, kissy, marriage_owo, misty, xwu_nud35
 
 import discord, re, traceback, sys, asyncio
 import threading
 
+#FRIENDS
+import miss_celosia
+
 client = discord.Client()
 trans = rosebud_configs.trans
 prefix = rosebud_configs.settings.prefix
+
+setattr(client, 'rbs_friends', {})
 
 #current main settings in case I change config categories later
 settings = rosebud_configs.settings
@@ -17,7 +23,7 @@ async def on_ready():
     print('Logged in as')
     print(client.user.name.translate(trans))
     print(client.user.id)
-    client.change_presence(game=discord.Game(name='in the 8 Isles!'))
+    await client.change_presence(game=discord.Game(name='Serving Lady Luck Casino!'))
     #print('starting rp...')
     #threading.Thread(target=roleplay, args=(client,)).start()
     print('------')
@@ -36,7 +42,7 @@ async def on_member_remove(member):
     if member.server.id == rosebud_configs.settings.setting['main_server_id']:
         if member.id in big_boys.kicked:
             big_boys.kicked.remove(member.id)
-            farewell = '{} bye bitch.'
+            farewell = '{} bye bitch. (kicked)'
         await client.send_message(client.get_channel(rosebud_configs.settings.setting['entry_channel_id']), farewell.format(member.mention))
 
 @safety
@@ -126,7 +132,7 @@ async def on_message(message):
                 await client.send_message(message.channel, 'usage: {}{}'.format(prefix, availcommands[command]['help']))
             if len(message.attachments) > 0 or re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message.content):
                 try:
-                    client.delete_message(message)
+                    await client.delete_message(message)
                 except:
                     traceback.print_exc()
     else:
@@ -149,5 +155,7 @@ def th(loop, coro, *args, **kwargs):
     asyncio.run_coroutine_threadsafe(coro(args, kwargs), loop).result()
 
 if __name__ == '__main__':
+    client.rbs_friends['celosia'] = miss_celosia.client
     threading.Thread(target=client.run, args=(settings.token,)).start() #allows me to dynamically access/modify code
+    miss_celosia.start(client)
     rp.rolep(client, asyncio.get_event_loop())
