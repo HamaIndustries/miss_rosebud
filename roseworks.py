@@ -7,6 +7,9 @@ MONEY = Profile.currency_name
 MISC = 'miscellaneous'
 ADMIN = 'administration'
 CASINO = 'casino'
+EMOTES = 'emotes'
+
+flags = {'re':False}
 
 casinocommands_dict = {}
 commands_dict = {}

@@ -1,12 +1,18 @@
 import sys
 import pyCardDeck
 import asyncio
+import discord
+import random
 from typing import List
 from pyCardDeck.cards import PokerCard
 
 import roseworks
 from backend import profiles
 from backend.profiles import Profile
+
+symbols = ['❤', '♣', '♠', '♦', '♢', '♤', '♧', '♡']
+def rsym():
+    return random.choice(symbols)
 
 @roseworks.command('exchange', 'exchange [{}/{}] [amount]'.format(Profile.gamble_currency_name, Profile.currency_name), roseworks.CASINO)
 async def exchange(client, message):
@@ -51,6 +57,38 @@ async def exchange(client, message):
             amount*20,
             Profile.currency_name
             ))
+
+@roseworks.command('slots', 'slots [amount]', roseworks.CASINO)
+async def slots(client, message):
+    userprof = Profile(message.author)
+
+    ldl= '```╔╦╦╦╦╦╦╗\n╠╩╩╩╩╩╩╣\n  '
+    rdl= '  \n╠╦╦╦╦╦╦╣\n╚╩╩╩╩╩╩╝```'
+    
+    bet_amount = int(message.content.split()[1])
+    if bet_amount > userprof.info[Profile.gamble_currency_name]:
+        await client.send_message(message.channel,
+                            'I\'m afraid you haven\'t that many {} to spend. Feel free to exchange with me if you must supplement your enjoyment.'.format(Profile.gamble_currency_name)
+                            )
+        return
+    
+    #userprof.amend_currency(amount)
+    
+    machine = discord.Embed(color=0xffd1dc)
+    machine.set_author(name='Slots!', icon_url=client.user.default_avatar_url if client.user.avatar_url == '' else client.user.avatar_url)
+
+    current_slot = [rsym() for x in [0]*3]
+    machine.add_field(name = 'Betting {}{} for {}'.format(bet_amount, Profile.gamble_currency_symbol, message.author.name),
+                      value = ldl+''.join(current_slot)+rdl)
+    out = await client.send_message(message.channel, embed=machine)
+    print(machine.fields)
+    for i in range(5):
+        time.sleep(.5)
+        current_slot = [random.choice(symbols) for sfdgs in [0]*3]
+        
+     
+    
+
 
 class Player:
 
@@ -177,11 +215,12 @@ def sum_hand(hand: list):
         print("   Current score: {}".format(str(points)))
         return(points)
 
+'''
 @roseworks.command('blackjack', 'blackjack [chips]', roseworks.CASINO)
 def blackjack(client, message):
-    client.send_message(message.channel, 'Check back tomorrow for when I open the tables.')
+    client.send_message(message.channel, 'later for when I open the tables.')
 
-
+'''
 
 
 

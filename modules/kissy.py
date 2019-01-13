@@ -23,7 +23,7 @@ async def pay(client, message):
         amount = int(message.content.split()[2])
         if payer.id == wishid:
             recipient.amend_currency(amount)
-            await client.send_message(message.channel, 'Queen Wishi has amended {}\'s balance by {}{}.'.format(message.author.mention, message.mentions[0].mention, Profile.currency_symbol, amount))
+            await client.send_message(message.channel, 'Queen Wishi has amended {}\'s balance by {}{}.'.format(message.mentions[0].mention, amount, Profile.currency_symbol))
         elif amount <= 0:
             await client.send_message(message.channel, 'You can\'t pay {} fool.'.format(amount))
             return

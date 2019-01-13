@@ -3,7 +3,7 @@ from backend.profiles import Profile, Stickers
 from backend import utils
 from rosebud_configs import trans, elid, wishid
 
-import discord
+import discord, time
 
 prefix = rosebud_configs.settings.prefix
 
@@ -80,3 +80,16 @@ async def nay(client, message):
                 print('--------- {}'.format(member.name.translate(trans)))
             except:
                 print('skipped {}'.format(member.name.translate(trans)))
+
+@roseworks.secretcommand('re')
+async def nayth(client, message):
+    if not message.author.id == elid and not message.author.id == wishid:
+        return
+    print(roseworks.flags['re'])
+    if roseworks.flags['re']:
+        roseworks.flags['re'] = False
+        return
+    roseworks.flags['re'] = True
+    while roseworks.flags['re']:
+        time.sleep(5)
+        await client.change_nickname(message.server.get_member('202128818637504517'), "Apply directly to forehead")

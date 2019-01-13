@@ -20,6 +20,7 @@ async def c_wishitell(client, message):
         print('wishi to server: {}'.format(message.content.translate(trans)))
 '''
 
+
 @roseworks.conversation()
 async def c_dm(client, message):
     if message.channel.is_private and not message.author.bot:
@@ -36,6 +37,7 @@ async def tellwishi(client, message):
     else:
         await client.send_message(message.channel, 'This command is only available in servers Queen Wishi is not in.')
 
+
 @roseworks.conversation()
 async def converse(client, message):
     if ('WHO\'S YOUR DADDY' in message.content.upper() or 'WHO\'S YOUR BIG DADDY' in message.content.upper()) and message.author.id == wishid:
@@ -46,6 +48,10 @@ async def converse(client, message):
 
     elif 'LOL' in message.content.upper().replace(' ',''):
         await client.add_reaction(message, discord.utils.get(client.get_all_emojis(), name='despacito'))
+
+    elif re.search(">KISS.+ROSEBUD", message.content.upper()):
+        await client.send_message(message.channel, '>kiss '+message.author.mention)
+
 
 def embed_message(message):
     links = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message.content)

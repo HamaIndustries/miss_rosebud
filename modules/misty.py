@@ -60,19 +60,19 @@ async def weewoo(client, message):
         await asyncio.sleep(1)
 
 #Reactions, potentially to be combined into one command
-@roseworks.command('rclap', 'rclap', roseworks.MISC) 
-async def xwo(client, message):
+@roseworks.command('rclap', 'rclap', roseworks.EMOTES) 
+async def rclap(client, message):
     emb = discord.Embed(title='ehehe',description=' ', color=0xffd1dc)
     emb.set_image(url='https://cdn.discordapp.com/attachments/470834237948297228/508779215114731521/s.gif')
     await client.send_message(message.channel, embed=emb)
 
-@roseworks.command('rboo', 'rboo', roseworks.MISC) 
-async def xwo(client, message):
+@roseworks.command('rboo', 'rboo', roseworks.EMOTES) 
+async def rboo(client, message):
     emb = discord.Embed(title='***-0-''***',description=' ', color=0xffd1dc)
     emb.set_image(url='https://cdn.discordapp.com/attachments/473307957799551006/508784136257798146/a.gif')
     await client.send_message(message.channel, embed=emb)
 
-@roseworks.command('xwo', 'xwo', roseworks.MISC) 
+@roseworks.command('xwo', 'xwo', roseworks.EMOTES) 
 async def xwo(client, message):
     emb = discord.Embed(title='XWO"""',description=' ', color=0xffd1dc)
     emb.set_image(url='https://cdn.discordapp.com/attachments/361047333095604224/502529990571589642/awesome_1.gif')

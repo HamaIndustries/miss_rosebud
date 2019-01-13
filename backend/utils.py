@@ -1,9 +1,10 @@
 import rosebud_configs
 
-import os, random
+import os, random, requests
 from PIL import Image
 
 p_pink = 0xffd1dc
+
 
 async def silentremove(filename):
     try:
@@ -13,8 +14,9 @@ async def silentremove(filename):
         if e.errno != errno.ENOENT: 
             raise
 
-async def send_image(image, cli, channel, tran = None): #TODO: add lock to make this thread safe
-    #with stuff_lock:
+
+async def send_image(image, cli, channel, tran = None):  # TODO: add lock to make this thread safe
+    # with stuff_lock:
     try:
         if image.format == 'GIF':
             image.save('temp.gif', save_all=True, transparency=tran)
@@ -32,12 +34,15 @@ async def send_image(image, cli, channel, tran = None): #TODO: add lock to make 
             if os.path.isfile(i):
                 await silentremove(i)
 
+
 def load_image_from_url(url):
     response = requests.get(url)
     return Image.open(BytesIO(response.content))
 
+
 def gibberish():
     return random.choice('shxjxh  sjdjdj  sjdksjxj  shxjxhx  djdjdh  dhdjdhshd  dhdjdh  dhsjdh  dhdjd  ahdjshdh'.split())
+
 
 def premultiply(im):
     pixels = im.load()
@@ -50,6 +55,7 @@ def premultiply(im):
                 b = b * a // 255
                 pixels[x, y] = (r, g, b, a)
 
+
 def unmultiply(im):
     pixels = im.load()
     for y in range(im.size[1]):
@@ -61,6 +67,7 @@ def unmultiply(im):
                 b = 255 if b >= a else 255 * b // a
                 pixels[x, y] = (r, g, b, a)
 
+
 class TooSoonError(Exception):
-     def __init__(self, current, goal):
-         self.waittime =  current - goal
+    def __init__(self, current, goal):
+        self.waittime = current - goal
