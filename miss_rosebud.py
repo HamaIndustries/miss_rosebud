@@ -1,12 +1,12 @@
 import roseworks, rosebud_configs
-#from full_house import miss_celosia
+# from full_house import miss_celosia
 from backend import rp
 from modules import big_boys, conversation_hearts, general, kissy, marriage_owo, misty, xwu_nud35
 
 import discord, re, traceback, sys, asyncio
 import threading
 
-#FRIENDS
+# FRIENDS
 import miss_celosia
 
 client = discord.Client()
@@ -84,7 +84,7 @@ async def on_message(message):
         await client.send_message(message.channel, 'profiles created!')
         return
     '''
-#----- commands -----
+# ----- commands -----
     
     if message.content.startswith(prefix):
         command = message.content.split()[0].replace(',,','')
@@ -159,3 +159,5 @@ if __name__ == '__main__':
     threading.Thread(target=client.run, args=(settings.token,)).start() #allows me to dynamically access/modify code
     miss_celosia.start(client)
     rp.rolep(client, asyncio.get_event_loop())
+
+# test
