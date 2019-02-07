@@ -45,7 +45,6 @@ async def on_message(message):
         availcommands = dict(roseworks.casinocommands_dict)
 
         if command in availcommands:
-            availcommands.update(roseworks.secretcommands_dict)
             try:
                 await availcommands[command]['command'](client, message)
             except IndexError:
@@ -62,9 +61,6 @@ async def on_message(message):
                     await client.delete_message(message)
                 except:
                     traceback.print_exc()
-    else:
-        for i in roseworks.conversations:
-            await i(client, message)
             
 async def astart():
     start()

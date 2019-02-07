@@ -21,13 +21,68 @@ async def c_wishitell(client, message):
 '''
 
 
+'''for independent rosebud interaction
 @roseworks.conversation()
 async def c_dm(client, message):
     if message.channel.is_private and not message.author.bot:
         if len(message.attachments)>0:
             await client.send_message(discord.utils.get(client.get_all_members(), id=elid), content='{} sent {}'.format(message.author.name.translate(trans), message.attachments[0]['url']))
         print('==={}( {} ): {}'.format(message.author.name.translate(trans),message.author.id, '[image]' if message.content == '' else message.content.translate(trans)))
-        
+'''
+
+dmchannel = '542545218780528640'
+moonlit_casino = '527951672903729154'
+moonlit_output = '542571277454671875'
+general_convo = '542600309134852096'
+
+class Channellistener:
+    listen_channel = ''
+
+def is_error(func, *args, **kwargs):
+    try:
+        func(*args, **kwargs)
+        return False
+    except:
+        return True
+
+@roseworks.conversation()
+async def c_communicate(client, message):
+    async def display_message(channelid, message_type = 'Message'):
+        e = discord.Embed()
+        e.set_author(name=message.author.name, icon_url = message.author.avatar_url if not message.author.avatar_url == "" else message.author.default_avatar_url)
+        e.add_field(name=message_type, value='[image]' if message.content == '' else message.content)
+
+        if len(message.attachments)>0:
+            e.set_image(url=message.attachments[0]['url'])
+        await client.send_message(client.get_channel(channelid), content=message.author.id, embed=e)
+
+    async def reply_message(inp):
+        target = discord.utils.get(client.get_all_members(), id=inp.split(' ', maxsplit=1)[0])
+        if target == None:
+            target = discord.utils.get(client.get_all_channels(), id=inp.split(' ', maxsplit=1)[0])
+            if target == None:
+                raise AttributeError
+        await client.send_message(target, content=inp.split(' ', maxsplit=1)[1])
+
+    if message.channel.is_private and not message.author.bot:
+        await display_message(dmchannel)
+        print('==={}( {} ): {}'.format(message.author.name.translate(trans), message.author.id, '[image]' if message.content == '' else message.content.translate(trans)))
+
+    elif message.channel.id == moonlit_output and not message.author.bot:
+        await reply_message(moonlit_casino + " " + message.content)
+
+    elif message.channel.id == general_convo and not message.author.bot:
+        try:
+            await reply_message(message.content)
+        except:
+            ...
+
+    elif message.channel.id == Channellistener.listen_channel:
+        await display_message(Channellistener.listen_channel)
+
+@roseworks.secretcommand(name='setlisten')
+async def setlisten(client, message):
+    Channellistener.listen_channel = message.content.split(' ')[1]
 
 @roseworks.command('tellwishi', 'tellwishi {message}', roseworks.MISC)
 async def tellwishi(client, message):
@@ -36,7 +91,6 @@ async def tellwishi(client, message):
         print('{} to wishi: {}'.format(message.author.name.translate(trans), message.content.translate(trans).replace('{}tellwishi'.format(prefix), '')))
     else:
         await client.send_message(message.channel, 'This command is only available in servers Queen Wishi is not in.')
-
 
 @roseworks.conversation()
 async def converse(client, message):
