@@ -57,12 +57,14 @@ async def c_communicate(client, message):
         await client.send_message(client.get_channel(channelid), content=message.author.id, embed=e)
 
     async def reply_message(inp):
-        target = discord.utils.get(client.get_all_members(), id=inp.split(' ', maxsplit=1)[0])
+        reply = inp.split(' ', maxsplit=1)
+        target = discord.utils.get(client.get_all_members(), id=reply[0])
         if target == None:
-            target = discord.utils.get(client.get_all_channels(), id=inp.split(' ', maxsplit=1)[0])
+            target = discord.utils.get(client.get_all_channels(), id=reply[0])
             if target == None:
                 raise AttributeError
-        await client.send_message(target, content=inp.split(' ', maxsplit=1)[1])
+        await client.send_message(target, content=reply[1])
+        print('==='+client.user.name+' to {} ( {} ): '.format(target.name.translate(trans), reply[0])+reply[1])
 
     if message.channel.is_private and not message.author.bot:
         await display_message(dmchannel)
@@ -71,10 +73,16 @@ async def c_communicate(client, message):
     elif message.channel.id == moonlit_output and not message.author.bot:
         await reply_message(moonlit_casino + " " + message.content)
 
-    elif message.channel.id == general_convo and not message.author.bot:
+    elif (message.channel.id == general_convo or message.channel.id == dmchannel) and not message.author.bot:
         try:
             await reply_message(message.content)
-        except:
+            await client.delete_message(message)
+            reply = message.content.split(' ', maxsplit=1)
+            e = discord.Embed()
+            e.set_author(name = client.user.name, icon_url = client.user.avatar_url)
+            e.add_field(name='Message to {}'.format(client.get_user_info(reply[0])), value=reply[1])
+            await client.send_message(message.channel, embed=e)
+        except AttributeError:
             ...
 
     elif message.channel.id == Channellistener.listen_channel:
