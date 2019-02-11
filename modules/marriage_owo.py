@@ -92,7 +92,7 @@ async def divorce(client, message):
         if message.author.id in i:
             print(message.author.id)
             print(i)
-            await client.send_message(message.channel, 'Your marriage has been nullified, {}. I will be offering complimentary backroom services for you, if you paid the deposit following your wedding.'.format(readmarriages()[message.author.id]))
+            await client.send_message(message.channel, 'Your marriage has been nullified, {}. I will be offering complimentary backroom services for you, if you paid the deposit following your wedding.'.format(message.author.name))
             delmarriage(message.author.id)
             print('{} was divorced'.format(message.author.name.translate(trans)))
             await Stickers.award(message.author.id, 'Divorced')

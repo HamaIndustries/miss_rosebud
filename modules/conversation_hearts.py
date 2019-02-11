@@ -80,7 +80,7 @@ async def c_communicate(client, message):
             reply = message.content.split(' ', maxsplit=1)
             e = discord.Embed()
             e.set_author(name = client.user.name, icon_url = client.user.avatar_url)
-            e.add_field(name='Message to {}'.format(client.get_user_info(reply[0])), value=reply[1])
+            e.add_field(name='Message to {}'.format(client.get_user_info(reply[0]).name), value=reply[1])
             await client.send_message(message.channel, embed=e)
         except AttributeError:
             ...
