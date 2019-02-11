@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3661c54d-ef65-4ec3-8608-b13dc35798f7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/modules/conversation_hearts.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/conversation_hearts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/marriage_owo.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/marriage_owo.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/conversation_hearts.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="70" column="100" selection-start-line="70" selection-start-column="100" selection-end-line="70" selection-end-column="100" />
+            <state relative-caret-position="367">
+              <caret line="81" column="70" lean-forward="true" selection-start-line="81" selection-start-column="70" selection-end-line="81" selection-end-column="70" />
               <folding>
                 <element signature="e#0#33#0" expanded="true" />
               </folding>
@@ -383,8 +382,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/conversation_hearts.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="70" column="100" selection-start-line="70" selection-start-column="100" selection-end-line="70" selection-end-column="100" />
+        <state relative-caret-position="367">
+          <caret line="81" column="70" lean-forward="true" selection-start-line="81" selection-start-column="70" selection-end-line="81" selection-end-column="70" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
           </folding>

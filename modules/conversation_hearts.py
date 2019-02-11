@@ -85,8 +85,8 @@ async def c_communicate(client, message):
         except AttributeError:
             ...
 
-    elif message.channel.id == Channellistener.listen_channel:
-        await display_message(Channellistener.listen_channel)
+    elif message.channel.id == Channellistener.listen_channel and not message.author.bot:
+        await display_message(general_convo)
 
 @roseworks.secretcommand(name='setlisten')
 async def setlisten(client, message):
