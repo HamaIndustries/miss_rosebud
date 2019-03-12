@@ -65,6 +65,7 @@ async def c_communicate(client, message):
                 raise AttributeError
         await client.send_message(target, content=reply[1])
         print('==='+client.user.name+' to {} ( {} ): '.format(target.name.translate(trans), reply[0])+reply[1])
+        return target.name
 
     if message.channel.is_private and not message.author.bot:
         await display_message(dmchannel)
@@ -75,15 +76,16 @@ async def c_communicate(client, message):
 
     elif (message.channel.id == general_convo or message.channel.id == dmchannel) and not message.author.bot:
         try:
-            await reply_message(message.content)
+            tname = await reply_message(message.content)
+        except AttributeError:
+            ...
+        else:
             await client.delete_message(message)
             reply = message.content.split(' ', maxsplit=1)
             e = discord.Embed()
-            e.set_author(name = client.user.name, icon_url = client.user.avatar_url)
-            e.add_field(name='Message to {}'.format(client.get_user_info(reply[0]).name), value=reply[1])
+            e.set_author(name=client.user.name, icon_url=client.user.avatar_url)
+            e.add_field(name='Message to {}'.format(tname), value=reply[1])
             await client.send_message(message.channel, embed=e)
-        except AttributeError:
-            ...
 
     elif message.channel.id == Channellistener.listen_channel and not message.author.bot:
         await display_message(general_convo)

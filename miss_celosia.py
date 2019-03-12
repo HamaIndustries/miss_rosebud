@@ -80,4 +80,4 @@ def th(loop, coro, *args, **kwargs):
     asyncio.run_coroutine_threadsafe(coro(args, kwargs), loop).result()
 
 if __name__ == '__main__':
-        rp.rolep(client, asyncio.get_event_loop())
+    rp.rolep(client, asyncio.get_event_loop())
