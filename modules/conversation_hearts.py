@@ -76,10 +76,14 @@ async def c_communicate(client, message):
 
     elif (message.channel.id == general_convo or message.channel.id == dmchannel) and not message.author.bot:
         try:
-            tname = await reply_message(message.content)
+            await reply_message(message.content)
         except AttributeError:
             ...
         else:
+            try:
+                tname = client.get_user_info(message.content.split()[0]).name
+            except:
+                tname = client.get_channel(message.content.split[0]).name
             await client.delete_message(message)
             reply = message.content.split(' ', maxsplit=1)
             e = discord.Embed()
