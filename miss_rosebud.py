@@ -43,8 +43,12 @@ async def on_member_remove(member):
         if member.id in big_boys.kicked:
             big_boys.kicked.remove(member.id)
             farewell = '{} bye bitch. (kicked)'
+        if member.nick:
+            farewell.format(member.nick + ' ({})'.format(member.name))
+        else:
+            farewell.format(member.name)
         await client.send_message(client.get_channel(rosebud_configs.settings.setting['entry_channel_id']),
-                                  farewell.format(member.nick or member.name))
+                                  farewell)
 
 @safety
 @client.event
