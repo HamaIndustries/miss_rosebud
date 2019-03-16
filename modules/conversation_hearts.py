@@ -81,9 +81,9 @@ async def c_communicate(client, message):
             ...
         else:
             try:
-                tname = await client.get_user_info(message.content.split[0]).name
+                tname = await client.get_user_info(message.content.split()[0]).name
             except:
-                tname = await client.get_channel(message.content.split[0]).name
+                tname = await client.get_channel(message.content.split()[0]).name
             await client.delete_message(message)
             reply = message.content.split(' ', maxsplit=1)
             e = discord.Embed()
