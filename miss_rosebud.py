@@ -32,6 +32,8 @@ def safety(func):
     async def decorator(*args, **kwargs):
         try:
             return func(*args, **kwargs)
+        except discord.errors.Forbidden:
+            pass
         except Exception as e:
             print('Uncaught exception {}, ignoring...'.format(repr(e)))
     return decorator
