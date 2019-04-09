@@ -122,5 +122,5 @@ $RECYCLE.BIN/
 *.pk
 other_bots/
 eli_*
-.idea/workspace.xml
+.idea/
 .idea/workspace.xml
