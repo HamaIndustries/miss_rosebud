@@ -13,7 +13,7 @@ Image commands!
 settings = rosebud_configs.settings
 
 @roseworks.command('wishify', 'wishify {url} {color hex}', roseworks.IMAGES)
-async def wishif(client, message):
+async def wishify(client, message):
     print(message.author.id)
     arg = message.content.strip().split(' ')
     color = 'ffd1dc'

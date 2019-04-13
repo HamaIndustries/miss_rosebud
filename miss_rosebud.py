@@ -40,15 +40,15 @@ def safety(func):
 
 @client.event
 async def on_member_remove(member):
-    farewell = 'Cya {} lmao.'
     if member.server.id == rosebud_configs.settings.setting['main_server_id']:
+        farewell = 'Cya {} lmao.'
         if member.id in big_boys.kicked:
             big_boys.kicked.remove(member.id)
             farewell = '{} bye bitch. (kicked)'
         if member.nick:
-            farewell.format(member.nick + ' ({})'.format(member.name))
+            farewell.format(str(member.nick) + ' ({})'.format(member.name))
         else:
-            farewell.format(member.name)
+            farewell.format(str(member.name))
         await client.send_message(client.get_channel(rosebud_configs.settings.setting['entry_channel_id']),
                                   farewell)
 
