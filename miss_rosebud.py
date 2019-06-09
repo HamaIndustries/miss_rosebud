@@ -41,14 +41,10 @@ def safety(func):
 @client.event
 async def on_member_remove(member):
     if member.server.id == rosebud_configs.settings.setting['main_server_id']:
-        farewell = 'Cya {} lmao.'
+        farewell = f'Cya {str(member.name)} lmao.'
         if member.id in big_boys.kicked:
             big_boys.kicked.remove(member.id)
-            farewell = '{} bye bitch. (kicked)'
-        if member.nick:
-            farewell.format(str(member.nick) + ' ({})'.format(member.name))
-        else:
-            farewell.format(str(member.name))
+            farewell += ' (kicked)'
         await client.send_message(client.get_channel(rosebud_configs.settings.setting['entry_channel_id']),
                                   farewell)
 
@@ -87,12 +83,12 @@ async def on_message(message):
             profiles = dict()
             #profiles['lucky'] = 'dante'
             pickle.dump(profiles, f)
-        
+
         await client.send_message(message.channel, 'profiles created!')
         return
     '''
 # ----- commands -----
-    
+
     if message.content.startswith(prefix):
         command = message.content.split()[0].replace(',,','')
 
@@ -116,14 +112,14 @@ async def on_message(message):
 
                 for i in organized:
                     send.add_field(name='✿ {} ✿'.format(i),value='```{}```'.format(re.sub('[\[\]\']', '', str(list(organized[i])))), inline=False)
-                
+
                 #send.add_field(name='✿ marriage commands ✿',value='```{}```'.format(), inline=False)
                 #send.add_field(name='✿ miscellaneous ✿', value='```{}```'.format(re.sub('[\[\]\']', '', str(list(misccommands.keys())))), inline=False)
                 #send = '٩( ᐛ )و  Commands!\n✿ marriage commands ✿\n{}\n\n✿ miscellaneous ✿\n{}\n\nMore to come. ;3c'.format(
                 #    re.sub('[\[\]\']', '', str(list(commands.keys()))), re.sub('[\[\]\']', '', str(list(misccommands.keys()))))
                 await client.send_message(message.channel, embed=send)
 
-        
+
         elif command in availcommands or command in roseworks.secretcommands_dict:
             availcommands.update(roseworks.secretcommands_dict)
             try:
@@ -145,10 +141,10 @@ async def on_message(message):
     else:
         for i in roseworks.conversations:
             await i(client, message)
-            
+
 async def astart():
     start()
-         
+
 def start():
     try:
         client.run(settings.token)

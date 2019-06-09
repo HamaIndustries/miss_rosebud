@@ -111,8 +111,8 @@ async def converse(client, message):
     if ('WHO\'S YOUR DADDY' in message.content.upper() or 'WHO\'S YOUR BIG DADDY' in message.content.upper()) and message.author.id == wishid:
         await client.send_message(message.channel, "Queen Wishi.")
 
-    elif message.content.upper().startswith('I MADE') or message.content.upper().startswith('TODAY I'):
-        await client.send_message(message.channel, random.choice(['How interesting.', 'I see.', 'Fascinating.']))
+    # elif message.content.upper().startswith('I MADE') or message.content.upper().startswith('TODAY I'):
+    #     await client.send_message(message.channel, random.choice(['How interesting.', 'I see.', 'Fascinating.']))
 
     elif 'LOL' in message.content.upper().replace(' ',''):
         await client.add_reaction(message, discord.utils.get(client.get_all_emojis(), name='despacito'))
