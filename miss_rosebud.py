@@ -1,6 +1,6 @@
 import roseworks, rosebud_configs
 # from full_house import miss_celosia
-from backend import rp
+#from backend import rp
 from modules import big_boys, conversation_hearts, general, kissy, marriage_owo, misty, xwu_nud35
 
 import discord, re, traceback, sys, asyncio
@@ -161,6 +161,6 @@ if __name__ == '__main__':
     client.rbs_friends['celosia'] = miss_celosia.client
     threading.Thread(target=client.run, args=(settings.token,)).start() #allows me to dynamically access/modify code
     miss_celosia.start(client)
-    rp.rolep(client, asyncio.get_event_loop())
+    #rp.rolep(client, asyncio.get_event_loop())
 
 # test

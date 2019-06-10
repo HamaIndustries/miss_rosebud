@@ -1,6 +1,6 @@
 import roseworks, rosebud_configs
 #from full_house import miss_celosia
-from backend import rp
+#from backend import rp
 from modules import lady_luck_casino
 
 import discord, re, traceback, sys, asyncio
@@ -69,7 +69,7 @@ def start(leader):
     try:
         setattr(client, 'boss_lady', leader)
         threading.Thread(target=client.run, args=(settings.setting['celosia_token'],)).start() #allows me to dynamically access/modify code
-        rp.rolep(client, asyncio.get_event_loop())
+        #rp.rolep(client, asyncio.get_event_loop())
     except discord.errors.LoginFailure:
         if '--debuglogin' or '--dl' in sys.argv:
             raise
@@ -79,5 +79,5 @@ def start(leader):
 def th(loop, coro, *args, **kwargs):
     asyncio.run_coroutine_threadsafe(coro(args, kwargs), loop).result()
 
-if __name__ == '__main__':
-    rp.rolep(client, asyncio.get_event_loop())
+#if __name__ == '__main__':
+#    rp.rolep(client, asyncio.get_event_loop())
