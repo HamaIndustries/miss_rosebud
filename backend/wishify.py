@@ -3,6 +3,7 @@ from PIL import Image
 import os
 import numpy
 
+
 def screen(im, app, opacity):
     im_arr = numpy.array(im)
     im_arrfloat = im_arr.astype(float)
@@ -12,9 +13,11 @@ def screen(im, app, opacity):
     out = Image.fromarray(numpy.uint8(out))
     return out
 
-def colorify(inpu, hex='ffd1dc', opacity=1):
-    im = inpu.convert('RGBA')
-    app = Image.new('RGBA', im.size, tuple(int(hex[i:i+2], 16) for i in (0, 2 ,4)))
+
+def colorify(inpu, hex="ffd1dc", opacity=1):
+    im = inpu.convert("RGBA")
+    app = Image.new("RGBA", im.size, tuple(int(hex[i : i + 2], 16) for i in (0, 2, 4)))
     return screen(im, app, opacity)
 
-#colorify(Image.open('68.png')).show()
+
+# colorify(Image.open('68.png')).show()
