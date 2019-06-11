@@ -176,12 +176,12 @@ async def divorce(client, message):
             return
     if message.author.id == rosebud_configs.wishid:
         await client.send_message(
-            message.channel, "You are currently unmarried, Queen Wishi."
+            message.channel, "You are currently unmarried, Queen Wishi. I volunteer myself as your bride if you must divorce for satisfaction's sake."
         )
         return
     await client.send_message(
         message.channel,
-        "I'd do that, if someone wanted to spend any {} on you in the first place.",
+        "I'd do that, if someone wanted to spend any {} on you in the first place.".format(Profile.currency_name),
     )
 
 
