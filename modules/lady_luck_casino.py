@@ -17,6 +17,19 @@ def rsym():
     return random.choice(symbols)
 
 
+class Pot:
+    def __init__(self):
+        self.pot = 0
+
+    def jack(self, mon=None):
+        if not mon:
+            ret = self.pot
+            self.pot = 0
+            return ret
+        self.pot += mon / 2
+        return mon / 2
+
+
 @roseworks.command(
     "exchange",
     "exchange [{}/{}] [amount]".format(
@@ -74,13 +87,49 @@ async def exchange(client, message):
         )
 
 
+class Machine:
+    offset_mid = 191
+    offset_right = 191 * 2
+
+    def __init__(self):
+        self.pot = Pot()
+        # I'm bad at statistics, Lady Luck forgive me
+        self.modifiers = {
+            "flower": (
+                range(1, 300),
+                lambda x: self.pot.jack(x),
+                "Better luck next time.",
+            ),
+            "cherry": (range(300, 450), lambda x: x * 1, "Money's safe at least."),
+            "blueberry": (range(450, 650), lambda x: x * 2, "Double or nothing!"),
+            "raspberry": (range(650, 672), lambda x: x * 8, "8 🎉🎉🎉"),
+            "strawberry": (range(672, 678), lambda x: x * 16, "Two 8s. xwo"),
+            "peach": (
+                range(678, 680),
+                lambda x: x * 78,
+                "X_O I- Uh, let me count that out again...",
+            ),
+            "tada": (
+                range(680, 681),
+                lambda x: self.pot.jack(),
+                "Jackpot! feel free to pick up the second half of your prize in the back rooms. ;3€",
+            ),
+        }
+
+    def run_odds(self, cost):
+        roll = int(random.random() * 1000)
+        for symbol, (odds, func, reaction) in self.modifiers.items():
+            if roll in odds:
+                return symbol, func(cost), reaction
+        return None, 0, 'Lady Luck\'s not around it seems, care to try again?'
+
+
+
 @roseworks.command("slots", "slots [amount]", roseworks.CASINO)
 async def slots(client, message):
     userprof = Profile(message.author)
 
-    ldl = "```╔╦╦╦╦╦╦╗\n╠╩╩╩╩╩╩╣\n  "
-    rdl = "  \n╠╦╦╦╦╦╦╣\n╚╩╩╩╩╩╩╝```"
-
+    # TODO in 2.0: auto check/withdraw in user class.
     bet_amount = int(message.content.split()[1])
     if bet_amount > userprof.info[Profile.gamble_currency_name]:
         await client.send_message(
@@ -92,27 +141,6 @@ async def slots(client, message):
         return
 
     # userprof.amend_currency(amount)
-
-    machine = discord.Embed(color=0xFFD1DC)
-    machine.set_author(
-        name="Slots!",
-        icon_url=client.user.default_avatar_url
-        if client.user.avatar_url == ""
-        else client.user.avatar_url,
-    )
-
-    current_slot = [rsym() for x in [0] * 3]
-    machine.add_field(
-        name="Betting {}{} for {}".format(
-            bet_amount, Profile.gamble_currency_symbol, message.author.name
-        ),
-        value=ldl + "".join(current_slot) + rdl,
-    )
-    out = await client.send_message(message.channel, embed=machine)
-    print(machine.fields)
-    for i in range(5):
-        time.sleep(0.5)
-        current_slot = [random.choice(symbols) for sfdgs in [0] * 3]
 
 
 class Player:
