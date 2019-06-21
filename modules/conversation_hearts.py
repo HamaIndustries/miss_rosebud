@@ -1,7 +1,9 @@
 import roseworks, rosebud_configs
 from backend import utils
 
-import discord, random, re
+from owotrans import owo
+
+import discord, random, re, asyncio
 
 """
 Conversations!
@@ -151,6 +153,17 @@ async def tellwishi(client, message):
             message.channel,
             "This command is only available in servers Queen Wishi is not in.",
         )
+
+
+@roseworks.command("babi", "babi {text}", roseworks.MISC)
+async def babi(client, message):
+    loop = asyncio.get_running_loop()
+    try:
+        text = message.content.split(" ", 1)[1]
+        await client.send_message(message.channel, owo(text))
+    except IndexError:
+        mess = next(await client.logs_from(message.channel, limit=2)).content
+        await client.send_message(message.channel, owo(mess))
 
 
 @roseworks.conversation()
