@@ -121,8 +121,7 @@ class Machine:
         for symbol, (odds, func, reaction) in self.modifiers.items():
             if roll in odds:
                 return symbol, func(cost), reaction
-        return None, 0, 'Lady Luck\'s not around it seems, care to try again?'
-
+        return None, 0, "Lady Luck's not around it seems, care to try again?"
 
 
 @roseworks.command("slots", "slots [amount]", roseworks.CASINO)
