@@ -15,10 +15,8 @@ async def silentremove(filename):
             raise
 
 
-async def send_image(
-    image, cli, channel, tran=None
-):  # TODO: add lock to make this thread safe
-    # with stuff_lock:
+async def send_image(image, cli, channel, tran=None, content=None):
+    # TODO: unfuck this
     try:
         if image.format == "GIF":
             image.save("temp.gif", save_all=True, transparency=tran)
@@ -27,7 +25,7 @@ async def send_image(
         bg = Image.new("RGBA", image.size)
         bg.paste(image, (0, 0))
         bg.save("temp.png")
-        await cli.send_file(channel, "temp.png")
+        await cli.send_file(channel, "temp.png", content=content)
     except Exception as e:
         print("exception in send_image!")
         print("error: {}".format(str(e)))

@@ -1,14 +1,18 @@
+import functools
 import sys
 import pyCardDeck
 import asyncio
 import discord
 import random
 from typing import List
+
+from PIL import Image
 from pyCardDeck.cards import PokerCard
 
 import roseworks
 from backend import profiles
 from backend.profiles import Profile
+from backend.utils import send_image
 
 symbols = ["❤", "♣", "♠", "♦", "♢", "♤", "♧", "♡"]
 
@@ -95,19 +99,15 @@ class Machine:
         self.pot = Pot()
         # I'm bad at statistics, Lady Luck forgive me
         self.modifiers = {
-            "flower": (
-                range(1, 300),
-                lambda x: self.pot.jack(x),
-                "Better luck next time.",
-            ),
-            "cherry": (range(300, 450), lambda x: x * 1, "Money's safe at least."),
+            "flower": (range(1, 300), self.pot.jack, "Better luck next time."),
+            "cherry": (range(300, 450), lambda x: x * 1, "Your money's safe at least."),
             "blueberry": (range(450, 650), lambda x: x * 2, "Double or nothing!"),
             "raspberry": (range(650, 672), lambda x: x * 8, "8 🎉🎉🎉"),
-            "strawberry": (range(672, 678), lambda x: x * 16, "Two 8s. xwo"),
+            "strawberry": (range(672, 678), lambda x: x * 16, "16x? Two 8s. xwo"),
             "peach": (
                 range(678, 680),
                 lambda x: x * 78,
-                "X_O I- Uh, let me count that out again...",
+                "Peach time??? X_O I- Uh, let me count that out again...",
             ),
             "tada": (
                 range(680, 681),
@@ -117,11 +117,14 @@ class Machine:
         }
 
     def run_odds(self, cost):
-        roll = int(random.random() * 1000)
+        roll = int(random.random() * 800)
         for symbol, (odds, func, reaction) in self.modifiers.items():
             if roll in odds:
-                return symbol, func(cost), reaction
+                return symbol, int(func(cost)), reaction
         return None, 0, "Lady Luck's not around it seems, care to try again?"
+
+
+mach = Machine()
 
 
 @roseworks.command("slots", "slots [amount]", roseworks.CASINO)
@@ -138,6 +141,36 @@ async def slots(client, message):
             ),
         )
         return
+    elif bet_amount <= 0:
+        await client.send_message(
+            message.channel,
+            "Not to be rude, but all possible attempts to defraud the Casino are reported directly to Queen wishi",
+        )
+        return
+
+    userprof.amend_currency(-bet_amount, typ=Profile.gamble_currency_name)
+    symbol, ret_amount, resp = mach.run_odds(bet_amount)
+
+    if symbol:
+        symbols = [f"resources/slots/{symbol}.png" for _ in range(3)]
+        userprof.amend_currency(ret_amount, typ=Profile.gamble_currency_name)
+    else:
+        rand_syms = list(mach.modifiers.keys())
+        symbols = [f"resources/slots/{random.choice(rand_syms)}.png" for _ in range(3)]
+
+    im = await asyncio.get_event_loop().run_in_executor(
+        None, functools.partial(render_slots, symbols)
+    )
+    await client.send_message(message.channel, f"{resp}\n(won {ret_amount} chips)")
+    await send_image(im, client, message.channel)
+
+
+def render_slots(symbols):
+    with Image.open("resources/slots/machine.png") as backg:
+        for i in range(3):
+            with Image.open(symbols[i]) as symbol:
+                backg.paste(symbol, (195 * i, 0), symbol)
+        return backg.copy()
 
     # userprof.amend_currency(amount)
 
