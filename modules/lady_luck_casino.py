@@ -102,7 +102,7 @@ class Machine:
             "flower": (range(1, 300), self.pot.jack, "Better luck next time."),
             "cherry": (range(300, 450), lambda x: x * 1, "Your money's safe at least."),
             "blueberry": (range(450, 650), lambda x: x * 2, "Double or nothing!"),
-            "raspberry": (range(650, 672), lambda x: x * 8, "8 🎉🎉🎉"),
+            "raspberry": (range(650, 672), lambda x: x * 8, "8x 🎉🎉🎉"),
             "strawberry": (range(672, 678), lambda x: x * 16, "16x? Two 8s. xwo"),
             "peach": (
                 range(678, 680),
@@ -169,7 +169,11 @@ def render_slots(symbols):
     with Image.open("resources/slots/machine.png") as backg:
         for i in range(3):
             with Image.open(symbols[i]) as symbol:
-                backg.paste(symbol, (195 * i, 0), symbol)
+                new_l = Image.new("RGBA", symbol.size)
+                new_l.paste(symbol, (195 * i, 0), symbol)
+                # symbol = symbol.transform(symbol.size, Image.AFFINE, ())
+                backg = Image.alpha_composite(backg, new_l)
+                # backg.paste(symbol, (195 * i, 0), symbol)
         return backg.copy()
 
     # userprof.amend_currency(amount)
