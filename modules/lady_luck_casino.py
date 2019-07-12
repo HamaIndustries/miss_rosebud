@@ -73,7 +73,7 @@ async def exchange(client, message):
         userprof.amend_currency(amount // 20, Profile.gamble_currency_name)
         await client.send_message(
             message.channel,
-            "You've exchanged {} {} for {} {}. Have a nice day, and please check back when the tables are opened.".format(
+            "You've exchanged {} {} for {} {}. Have a nice day, and enjoy your run on the tables!".format(
                 amount - (amount % 20),
                 Profile.currency_name,
                 amount // 20,

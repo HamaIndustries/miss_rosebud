@@ -157,12 +157,13 @@ async def tellwishi(client, message):
 
 @roseworks.command("babi", "babi {text}", roseworks.MISC)
 async def babi(client, message):
-    loop = asyncio.get_running_loop()
+    loop = asyncio.get_event_loop()  # Running loop in 3.7
     try:
         text = message.content.split(" ", 1)[1]
         await client.send_message(message.channel, owo(text))
     except IndexError:
-        mess = next(await client.logs_from(message.channel, limit=2)).content
+        i = 0
+        mess = [mess.content async for mess in client.logs_from(message.channel, limit=2)][1]
         await client.send_message(message.channel, owo(mess))
 
 
