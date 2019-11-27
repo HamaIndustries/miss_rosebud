@@ -178,7 +178,7 @@ async def converse(client, message):
     # elif message.content.upper().startswith('I MADE') or message.content.upper().startswith('TODAY I'):
     #     await client.send_message(message.channel, random.choice(['How interesting.', 'I see.', 'Fascinating.']))
 
-    elif "LOL" in message.content.upper().replace(" ", ""):
+    elif "LOL" in message.content.upper().replace(" ", "") and message.server.id == '425046326275866626':
         await client.add_reaction(
             message, discord.utils.get(client.get_all_emojis(), name="despacito")
         )

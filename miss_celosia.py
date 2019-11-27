@@ -35,6 +35,13 @@ def safety(func):
 
     return decorator
 
+@client.event
+async def on_member_join(member):
+    if member.server.id == rosebud_configs.settings.setting["main_server_id"]:
+        await client.send_message(
+            client.get_channel(rosebud_configs.settings.setting["entry_channel_id"]),
+            f"Welcome to the Lady Luck Casino, {member.mention}, be sure to look over the <#461692332476071937>. We hope you enjoy your stay here."
+            )
 
 @safety
 @client.event
